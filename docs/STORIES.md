@@ -24,8 +24,10 @@
 | 11  | Als Benutzer möchte ich die App sowohl auf Deutsch als auch auf Englisch verwenden können, damit sie für mich und andere Nutzer unabhängig von der Sprache verwendbar und verständlich ist                                                                           | 2   |      | SH   | [#11](https://github.com/TGM-HIT/syt5-gek1051-mobile-application-fmms_shoppinglist/issues/13) |
 | 12  | Als Benutzer möchte ich jederzeit den Synchronisationsstatus der Einkaufsliste mit dem Server in der App sehen, damit ich weiß, ob meine Änderungen gespeichert und synchronisiert werden.                                                                           | 1   |      | MH   | [#12](https://github.com/TGM-HIT/syt5-gek1051-mobile-application-fmms_shoppinglist/issues/14) |
 | 13  | Als Nutzer wäre es schön, wenn mir beim Eingeben eines Artikelnamens passende Vorschläge angezeigt werden (z.B. "Ei" -> "Eier"), damit ich schneller und bequemer auch potentielle lange Artikelnamen hinzufügen kann.                                               | 3   |      | N2H  | [#13](https://github.com/TGM-HIT/syt5-gek1051-mobile-application-fmms_shoppinglist/issues/15) |
+| 14  | Als Benutzer kann ich meine Einkaufsliste auch ohne Internetverbindung verwenden und trotzdem alle Artikel verwalten, um meinen Einkauf ohne Probleme unter allen Bedingungen fortsetzen zu können.                                                                  | 1   |      | MH   | [14](https://github.com/TGM-HIT/syt5-gek1051-mobile-application-fmms_shoppinglist/issues/16)  |
  
 
 ## Zusammenfassung
 
 *Bitte hier die einzelnen Gruppenmitgliedern, mit deren Gesamtbelastung (SPs) auflisten!*
+
