@@ -2,10 +2,10 @@
   "name": "shopping-list-vuejs-pouchdb",
   "version": "1.0.0",
   "description": "Offline first shopping list app built with Vue.js and PouchDB",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "start": "node app.js"
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
