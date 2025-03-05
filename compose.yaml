@@ -1,4 +1,18 @@
 services:
+  web:
+    build: .
+    ports:
+      - 8081:8081
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+            - docs/
+        - action: rebuild
+          path: package.json
   couchdb:
     image: couchdb:3.4.2
     ports:
@@ -20,4 +34,5 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
+        curl -u "$COUCHDB_USER:$COUCHDB_PASSWORD" -X PUT http://couchdb:5984/_users
         curl -u "$COUCHDB_USER:$COUCHDB_PASSWORD" -X PUT http://couchdb:5984/shopping-list
