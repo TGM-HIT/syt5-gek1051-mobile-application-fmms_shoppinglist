@@ -1,4 +1,4 @@
-# Constributing
+# Contribution
 
 ## Development
 Erstelle eine `.env` Datei im Root-Verzeichnis des Projektes mit folgendem Inhalt:
