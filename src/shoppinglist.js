@@ -95,18 +95,21 @@ Vue.material.registerTheme('default', {
 var app = new Vue({
   el: '#app',
   data: {
+    lang: 'de',
     mode: 'showlist',
     pagetitle: 'Shopping Lists',
     shoppingLists: [],
     shoppingListItems: [],
     singleList: null,
     currentListId: null,
-    newItemTitle:'',
     places: [],
     selectedPlace: null,
     syncURL:'',
     syncStatus: 'notsyncing',
     selectedItem: null, // Holds the currently selected item for detail view
+    newItemTitle:'',
+    dictionary: [],
+    filteredSuggestions: [],
   },
   // computed functions return data derived from the core data.
   // if the core data changes, then this function will be called too.
@@ -190,6 +193,7 @@ var app = new Vue({
       this.startSync();
     }).catch((e) => {})
 
+    this.loadDictionary();
   },
   methods: {
     /**
@@ -454,6 +458,41 @@ var app = new Vue({
       this.currentListId = id;
       this.pagetitle = title;
       this.mode = 'itemedit';
+    },
+
+    /**
+     * Loads the dictionary of words for the current language
+     */
+    async loadDictionary() {
+        try {
+            const response = await fetch('./assets/dictionary/items-' + this.lang + '.txt');
+            const text = await response.text();
+            this.dictionary = text.split('\n').map(word => word.trim()).filter(word => word.length > 0);
+            console.log("loaded dictionary with (" + this.lang + ")", this.dictionary.length, "words");
+        } catch (error) {
+            console.error('Error loading dictionary:', error);
+        }
+    },
+    /**
+     * Filters the dictionary of words based on the current input
+     */
+    filterSuggestions() {
+        const query = this.newItemTitle.toLowerCase();
+        if (!query) {
+            this.filteredSuggestions = [];
+            return;
+        }
+        this.filteredSuggestions = this.dictionary.filter(word => word.toLowerCase().startsWith(query));
+        this.highlightedIndex = -1;
+    },
+    /**
+     * Selects a suggestion from the filtered list
+     * it selects the clicked word
+     * @param {String} word
+     */
+    selectSuggestion(word) {
+        this.newItemTitle = word;
+        this.filteredSuggestions = [];
     },
 
     /**

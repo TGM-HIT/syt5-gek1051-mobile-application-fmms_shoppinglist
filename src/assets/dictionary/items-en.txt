@@ -1,0 +1,76 @@
+Bread
+Rolls
+Baguette
+Butter
+Margarine
+Cheese
+Milk
+Yogurt
+Quark (curd cheese)
+Eggs
+Flour
+Sugar
+Salt
+Pepper
+Oil
+Vinegar
+Pasta
+Rice
+Potatoes
+Onions
+Garlic
+Tomatoes
+Cucumbers
+Bell peppers
+Carrots
+Apples
+Bananas
+Oranges
+Lemons
+Grapes
+Strawberries
+Sausages
+Ham
+Minced meat
+Chicken
+Beef
+Fish
+Salmon
+Water
+Sparkling water
+Juice
+Apple juice
+Orange juice
+Cola
+Lemonade
+Iced tea
+Coffee
+Tea
+Beer
+Wine
+Champagne
+Chocolate
+Gummy bears
+Cookies
+Chips
+Nuts
+Candies
+Ice cream
+Toilet paper
+Paper towels
+Dish soap
+Laundry detergent
+Fabric softener
+Trash bags
+Aluminum foil
+Baking paper
+Toothpaste
+Shampoo
+Shower gel
+Soap
+Gum
+Ketchup
+Mustard
+Mayonnaise
+Honey
+Jam
