@@ -26,6 +26,8 @@ const sampleListItem = {
   "type": "item",
   "version": 1,
   "title": "",
+  "quantity": 1,
+  "unit": "",
   "checked": false,
   "createdAt": "",
   "updatedAt": ""
@@ -103,6 +105,8 @@ var app = new Vue({
     singleList: null,
     currentListId: null,
     newItemTitle:'',
+    newItemQuantity:'',
+    newItemUnit:'',
     places: [],
     selectedPlace: null,
     syncURL:'',
@@ -463,9 +467,13 @@ var app = new Vue({
      */
     onAddListItem: function() {
       if (!this.newItemTitle) return;
+      if (!this.newItemQuantity) return;
+      if (!this.newItemUnit) return;
       var obj = JSON.parse(JSON.stringify(sampleListItem));
       obj._id = 'item:' + cuid();
       obj.title = this.newItemTitle;
+      obj.quantity = this.newItemQuantity;
+      obj.unit = this.newItemUnit;
       obj.list = this.currentListId;
       obj.createdAt = new Date().toISOString();
       obj.updatedAt = new Date().toISOString();
@@ -473,6 +481,8 @@ var app = new Vue({
         obj._rev = data.rev;
         this.shoppingListItems.unshift(obj);
         this.newItemTitle = '';
+        this.newItemQuantity = '';
+        this.newItemUnit = '';
       });
     },
 

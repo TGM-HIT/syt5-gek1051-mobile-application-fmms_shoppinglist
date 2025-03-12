@@ -142,6 +142,15 @@
 
         <!-- shopping list item add form -->
         <md-list-item>
+
+          <md-input-container>
+            <md-input v-model="newItemQuantity" placeholder="New item quantity e.g. 1" @keyup.enter.native="onAddListItem"></md-input>
+          </md-input-container>
+
+          <md-input-container>
+            <md-input v-model="newItemUnit" placeholder="New item unit e.g. liters" @keyup.enter.native="onAddListItem"></md-input>
+          </md-input-container>
+
           <!-- shopping item title -->
           <md-input-container>
             <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @keyup.enter.native="onAddListItem"></md-input>
@@ -163,7 +172,7 @@
 
           <!-- shopping list item title -->
           <div class="md-list-text-container">
-            <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
+            <span v-bind:class="{ cardchecked: item.checked}">{{ item.quantity }} {{ item.unit }} {{ item.title }}</span>
           </div>
 
           <!-- shopping list item delete button -->
