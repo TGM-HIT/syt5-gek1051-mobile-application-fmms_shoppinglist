@@ -115,6 +115,9 @@ var app = new Vue({
     selectedPlace: null,
     syncURL:'',
     syncStatus: 'notsyncing',
+    username: '',
+    password: '',
+    loginStatus: 'notloggedin',
     selectedItem: null, // Holds the currently selected item for detail view
     newItemTitle:'',
     dictionary: [],
@@ -211,6 +214,13 @@ var app = new Vue({
      */
     onClickSettings: function() {
       this.mode = 'settings';
+    },
+    /**
+     * Called when the user button is pressed. Sets the mode
+     * to 'user' so the Vue displays the user panel.
+     */
+    onClickUser: function() {
+      this.mode = 'user';
     },
     /**
      * Called when the about button is pressed. Sets the mode
@@ -314,6 +324,29 @@ var app = new Vue({
           this.syncStatus = 'syncerror';
         }
       });;
+    },
+
+    /**
+     * Called when the login button is pressed. The username and password
+     * are saved in PouchDB and the sync process is restarted.
+     */
+    onClickLogin: function() {
+        console.log('onClickLogin');
+        this.loginStatus = 'loggedin';
+    },
+    /**
+     * Called when the register button is pressed. The username and password
+     * are saved in PouchDB and the sync process is restarted.
+     */
+    onClickRegister: function() {
+        console.log('onClickRegister');
+        this.loginStatus = 'notloggedin';
+    },
+
+    /**
+     */
+    suggestWord: function() {
+        console.log('suggestWord');
     },
 
     /**

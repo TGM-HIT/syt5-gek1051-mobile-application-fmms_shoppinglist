@@ -51,6 +51,10 @@
         <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickAbout">
           <md-icon>info_outline</md-icon>
         </md-button>
+        <!-- user -->
+        <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickUser">
+          <md-icon>person</md-icon>
+        </md-button>
 
       </md-toolbar>
     </md-whiteframe> <!-- top bar -->
@@ -282,6 +286,47 @@
             </md-button>
           </md-card-actions> 
         </md-card> <!-- settings -->
+
+      <!-- user -->
+      <md-card v-if="mode == 'user'">
+          <md-card-header>User</md-card-header>
+          <md-card-content>
+            You can register and login as a user to edit your own shopping lists.
+
+            <!-- Username -->
+            <md-input-container>
+              <label>Username</label>
+              <md-input placeholder="username" type="text" v-model="username"></md-input>
+            </md-input-container>  
+
+            <!-- Password -->
+            <md-input-container>
+              <label>Password</label>
+              <md-input placeholder="password" type="password" v-model="password"></md-input>
+            </md-input-container>  
+
+            <h4>Login Status</h4>
+
+            <!-- visualisation of login status -->
+            <md-chip v-if="loginStatus == 'notloggedin'">Not Logged in</md-chip>
+            <md-chip v-if="loginStatus == 'loggedin'" class="md-primary">Logged in</md-chip>
+            <md-chip v-if="loginStatus == 'loginerror'" class="md-warn">Login Error</md-chip>
+          </md-card-content>
+
+          <md-card-actions>
+            <!-- submit button that logges the user in -->
+            <md-button v-on:click="onClickLogin">
+                Login
+            </md-button>
+          </md-card-actions> 
+          <md-card-actions>
+            <!-- submit button that creates a new user -->
+            <md-button v-on:click="onClickRegister">
+                Register
+            </md-button>
+          </md-card-actions> 
+
+        </md-card> <!-- user -->
 
       <!-- about -->
       <md-card v-if="mode == 'about'">
