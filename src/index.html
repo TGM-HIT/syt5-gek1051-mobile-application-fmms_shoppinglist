@@ -153,6 +153,23 @@
           </md-button>
         </md-list-item>
 
+        <!-- Modal-Dialog für die Detailansicht -->
+        <md-dialog :md-active.sync="isDetailDialogActive">
+          <md-dialog-title>Item Details</md-dialog-title>
+          <md-dialog-content>
+            <md-input-container>
+              <label>Title</label>
+              <md-input v-model="editItemTitle"></md-input>
+            </md-input-container>
+            <md-checkbox v-model="editItemChecked" class="md-primary">Checked</md-checkbox>
+            <!-- Weitere Details hier hinzufügen -->
+          </md-dialog-content>
+          <md-dialog-actions>
+            <md-button class="md-primary" v-on:click="onSaveItemDetail">Save</md-button>
+            <md-button v-on:click="isDetailDialogActive = false">Close</md-button>
+          </md-dialog-actions>
+        </md-dialog>
+
         <!-- shopping list items -->
         <md-list-item v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
 
@@ -165,6 +182,11 @@
           <div class="md-list-text-container">
             <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
           </div>
+
+          <!-- shopping list item detail button -->
+          <md-button v-on:click="onShowItemDetail(item)" class="md-icon-button md-list-action">
+            <md-icon>info</md-icon>
+          </md-button>
 
           <!-- shopping list item delete button -->
           <md-button v-on:click="onDeleteItem(item._id)" class="md-icon-button md-list-action">
