@@ -42,8 +42,8 @@
 
 ### Zusammenfassung
 
-- FD (Felix Dahmen): 12 SP
-- MF (Manuel Fellner): 14 SP
+- FD (Felix Dahmen): 8 SP
+- MF (Manuel Fellner): 19 SP
 - SP (Sebastian Pollak): 12 SP
 - MM (Milos Matic): 11 SP
 - Gesamt: 49 SP
