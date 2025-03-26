@@ -9,8 +9,8 @@ Die folgenden Abschnitte bieten detaillierte Einblicke in die getroffenen Entsch
 ### Tech Stack
 - Vuejs 3 *[1]*
 - CouchDB *[2]* / PouchDB *[3]*
-- Docker
-- Vitest & Vue Test Utils
+- Docker [11]
+- Karma & Vue Test Utils [9][10]
 
 ## Web Framework
 Nach sorgfältiger Evaluierung haben wir uns entschieden, den bestehenden Technologie-Stack größtenteils beizubehalten,
@@ -32,9 +32,13 @@ Da sie weiterhin den Bedürfnissen des Systems entsprechen, sehen wir derzeit ke
 ### Datenbanksynchronisation
 Bei der Offline-Nutzung von CouchDB und PouchDB sind Synchronisationskonflikte ein zentrales Thema.
 Beide Datenbanken erkennen Konflikte und speichern sie, führen jedoch keine automatische Zusammenführung durch.
-Stattdessen wird eine Revision als „gewinnend“ ausgewählt, wodurch Daten überschrieben werden können.
+Stattdessen wird eine Revision als „gewinnend“ ausgewählt, wodurch Daten überschrieben werden können. [8]
 
-Unser Ansatz: Ein manueller Algorithmus zur Konfliktlösung soll Daten intelligent zusammenführen und Verluste vermeiden. Die genaue Umsetzung ist noch in Planung.
+Unser Ansatz: Ein manueller Algorithmus zur Konfliktlösung soll Daten intelligent zusammenführen und Verluste vermeiden:
+
+1. Mit PouchDB alle Konflikte herausfiltern mit 
+2. Alle confliting revisionen überprüfen und mergen
+3. Danach Datenbanken Synchonisieren
 
 ## Deployment
 Die Bereitstellung der Anwendung erfolgt effizient und standardisiert über **Docker**.
@@ -42,13 +46,12 @@ Dies ermöglicht eine hohe Portabilität, einfache Skalierbarkeit und eine konsi
 Für eine detaillierte Anleitung zum Aufsetzen und Bereitstellen der Anwendung verweisen wir auf das Dokument **[CONTRIBUTION.md](CONTRIBUTION.md)**.
 
 ## Testing
-Für das Testing der Anwendung setzen wir auf eine Kombination aus **Vitest** und den **Vue Test Utils**.
-Diese Wahl fiel aufgrund mehrerer Faktoren: Vitest ist ein modernes, leichtgewichtiges und schnelles Test-Framework,
-das sich nahtlos in Vue-Projekte integrieren lässt. Ergänzt durch die Vue Test Utils bietet es eine robuste Grundlage,
-um sowohl Unit-Tests als auch Integrationstests effizient zu implementieren.
-Die Einrichtung ist unkompliziert, was den Entwicklungsprozess erleichtert.
-
-
+Für das Testing der Anwendung setzen wir auf eine Kombination aus Karma und den Vue Test Utils.
+Diese Wahl fiel aufgrund mehrerer Faktoren: Karma ist ein bewährtes, flexibles und leistungsstarkes Test-Framework,
+das sich hervorragend in Vue-Projekte integrieren lässt und wurde schon im Template verwendet.
+Ergänzt durch die Vue Test Utils bietet es eine solide Grundlage,
+um sowohl Unit-Tests als auch Integrationstests effektiv umzusetzen.
+Die Einrichtung ist einfach und unterstützt den Entwicklungsprozess effizient.
 
 ## Resources
 
@@ -65,3 +68,11 @@ Die Einrichtung ist unkompliziert, was den Entwicklungsprozess erleichtert.
 - [6]: https://www.quora.com/What-are-the-pros-and-cons-of-CouchDB; 19.03.2025
 
 - [7]: https://www.joshmorony.com/creating-a-multiple-user-app-with-pouchdb-couchdb/; 19.03.2025
+
+- [8]: https://pouchdb.com/guides/conflicts.html
+
+- [9]: https://karma-runner.github.io/6.4/index.html
+
+- [10]: https://test-utils.vuejs.org/guide/
+
+- [11]: https://www.docker.com/
