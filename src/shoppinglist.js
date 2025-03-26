@@ -106,10 +106,7 @@ var app = new Vue({
     selectedPlace: null,
     syncURL:'',
     syncStatus: 'notsyncing',
-    isDetailDialogActive: false, // Aktivierungsstatus des Dialogs
-    editItemTitle: '', // Titel des zu bearbeitenden Items
-    editItemChecked: false, // Status des zu bearbeitenden Items
-    selectedItemId: null // ID des ausgewählten Items
+    selectedItem: null, // Holds the currently selected item for detail view
   },
   // computed functions return data derived from the core data.
   // if the core data changes, then this function will be called too.
@@ -548,31 +545,26 @@ var app = new Vue({
     },
 
     /**
-     * Öffnet den "Item Details"-Dialog und füllt ihn mit den Details des ausgewählten Items.
+     * Called when the info button is clicked for a shopping list item.
+     * Sets the selected item and switches to the detail view mode.
      * @param {Object} item
      */
     onShowItemDetail: function(item) {
-      if (!item) {
-        console.error("Item is undefined or null.");
-        return;
-      }
-      this.editItemTitle = item.title;
-      this.editItemChecked = item.checked;
-      this.selectedItemId = item._id;
-      this.isDetailDialogActive = true;
+      this.selectedItem = JSON.parse(JSON.stringify(item));
+      this.mode = 'itemdetail';
     },
-
     /**
-     * Speichert die Änderungen aus dem "Item Details"-Dialog zurück in das Item.
+     * Called when the Save button is clicked in the item detail view.
+     * Updates the item in PouchDB and the Vue model.
      */
     onSaveItemDetail: function() {
-      const item = this.findDoc(this.shoppingListItems, this.selectedItemId).doc;
-      if (item) {
-        item.title = this.editItemTitle;
-        item.checked = this.editItemChecked;
-        this.findUpdateDoc(this.shoppingListItems, this.selectedItemId);
-      }
-      this.isDetailDialogActive = false;
-    }
+      this.selectedItem.updatedAt = new Date().toISOString();
+      db.put(this.selectedItem).then((data) => {
+        this.selectedItem._rev = data.rev;
+        const match = this.findDoc(this.shoppingListItems, this.selectedItem._id);
+        Vue.set(this.shoppingListItems, match.i, this.selectedItem);
+        this.onBack();
+      });
+    },
   }
 })
