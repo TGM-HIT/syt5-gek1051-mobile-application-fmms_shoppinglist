@@ -44,3 +44,70 @@ body {
 .itemedit {
   background-color: white !important
 }
+
+/* Styling für die gesamte Karte */
+.item-detail-card {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+}
+
+/* Header-Styling */
+.item-detail-header {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #3f51b5;
+  margin-bottom: 20px;
+}
+
+/* Input-Styling */
+.item-detail-input {
+  margin-bottom: 20px;
+}
+
+.item-detail-input label {
+  font-size: 1em;
+  color: #757575;
+}
+
+/* Checkbox-Styling */
+.item-detail-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.item-detail-checkbox label {
+  font-size: 1em;
+  color: #757575;
+}
+
+/* Actions-Styling */
+.item-detail-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.save-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #e53935;
+}
