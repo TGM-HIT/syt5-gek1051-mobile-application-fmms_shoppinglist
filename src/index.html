@@ -181,28 +181,31 @@
       </md-list> <!-- shopping list item editor -->
 
       <!-- item detail view -->
-      <md-card v-if="mode == 'itemdetail'">
-        <md-card-header>Item Details</md-card-header>
-        <md-card-content>
+      <md-card v-if="mode == 'itemdetail'" class="item-detail-card">
+        <md-card-header class="item-detail-header">
+          <div class="item-detail-title">Item Details</div>
+        </md-card-header>
+        <md-card-content class="item-detail-content">
           <!-- item title -->
-          <md-input-container>
+          <md-input-container class="item-detail-input">
             <label>Item Name</label>
             <md-input v-model="selectedItem.title"></md-input>
           </md-input-container>
 
           <!-- item checked status -->
-          <md-input-container>
-            <label>Checked</label>
+          <div class="item-detail-checkbox">
             <md-checkbox v-model="selectedItem.checked" class="md-primary"></md-checkbox>
-          </md-input-container>
+            <label>Checked</label>
+          </div>
         </md-card-content>
-        <md-card-actions>
+
+        <md-card-actions class="item-detail-actions">
           <!-- save button -->
-          <md-button class="md-primary" v-on:click="onSaveItemDetail">Save</md-button>
+          <md-button class="md-primary save-button" v-on:click="onSaveItemDetail">Save</md-button>
           <!-- cancel button -->
-          <md-button v-on:click="onBack">Cancel</md-button>
+          <md-button class="cancel-button" v-on:click="onBack">Cancel</md-button>
         </md-card-actions>
-      </md-card> <!-- item detail view -->
+      </md-card>
 
       <!-- list of shopping lists -->
       <md-list v-if="mode == 'showlist'">
