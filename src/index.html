@@ -153,23 +153,6 @@
           </md-button>
         </md-list-item>
 
-        <!-- Modal-Dialog für die Detailansicht -->
-        <md-dialog :md-active.sync="isDetailDialogActive">
-          <md-dialog-title>Item Details</md-dialog-title>
-          <md-dialog-content>
-            <md-input-container>
-              <label>Title</label>
-              <md-input v-model="editItemTitle"></md-input>
-            </md-input-container>
-            <md-checkbox v-model="editItemChecked" class="md-primary">Checked</md-checkbox>
-            <!-- Weitere Details hier hinzufügen -->
-          </md-dialog-content>
-          <md-dialog-actions>
-            <md-button class="md-primary" v-on:click="onSaveItemDetail">Save</md-button>
-            <md-button v-on:click="isDetailDialogActive = false">Close</md-button>
-          </md-dialog-actions>
-        </md-dialog>
-
         <!-- shopping list items -->
         <md-list-item v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
 
@@ -196,6 +179,30 @@
           <md-divider></md-divider>
         </md-list-item>
       </md-list> <!-- shopping list item editor -->
+
+      <!-- item detail view -->
+      <md-card v-if="mode == 'itemdetail'">
+        <md-card-header>Item Details</md-card-header>
+        <md-card-content>
+          <!-- item title -->
+          <md-input-container>
+            <label>Item Name</label>
+            <md-input v-model="selectedItem.title"></md-input>
+          </md-input-container>
+
+          <!-- item checked status -->
+          <md-input-container>
+            <label>Checked</label>
+            <md-checkbox v-model="selectedItem.checked" class="md-primary"></md-checkbox>
+          </md-input-container>
+        </md-card-content>
+        <md-card-actions>
+          <!-- save button -->
+          <md-button class="md-primary" v-on:click="onSaveItemDetail">Save</md-button>
+          <!-- cancel button -->
+          <md-button v-on:click="onBack">Cancel</md-button>
+        </md-card-actions>
+      </md-card> <!-- item detail view -->
 
       <!-- list of shopping lists -->
       <md-list v-if="mode == 'showlist'">
