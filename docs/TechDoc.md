@@ -7,15 +7,15 @@ Ziel ist es, einen Überblick über den verwendeten Technologie-Stack zu geben.
 Die folgenden Abschnitte bieten detaillierte Einblicke in die getroffenen Entscheidungen.
 
 ### Tech Stack
-- Vuejs
-- CouchDB/PouchDB
+- Vuejs 3 *[1]*
+- CouchDB *[2]* / PouchDB *[3]*
 - Docker
 - Vitest & Vue Test Utils
 
 ## Web Framework
 Nach sorgfältiger Evaluierung haben wir uns entschieden, den bestehenden Technologie-Stack größtenteils beizubehalten,
 jedoch mit einer bedeutenden Änderung im Bereich des Web-Frameworks. Ursprünglich wurde **VueJS 2** eingesetzt, das Team hat jedoch beschlossen, auf **VueJS 3** umzusteigen. 
-Dieser Wechsel bringt zahlreiche Vorteile mit sich:
+Dieser Wechsel bringt zahlreiche Vorteile mit sich *[4], [5]*:
 
  - verbesserte Performance
  - moderne Features
@@ -27,7 +27,7 @@ Im Rahmen dieses Projekts wird daher die Vue-Version aktualisiert.
 Im Bereich der Datenbanken bleiben wir bei der bewährten Kombination aus **PouchDB** und **CouchDB**.
 Diese Technologien haben sich als stabil und gut geeignet für die Anforderungen des Projekts erwiesen,
 insbesondere durch ihre Fähigkeit zur Offline-Synchronisation und flexiblen Datenverwaltung.
-Da sie weiterhin den Bedürfnissen des Systems entsprechen, sehen wir derzeit keinen Anlass, hier Änderungen vorzunehmen.
+Da sie weiterhin den Bedürfnissen des Systems entsprechen, sehen wir derzeit keinen Anlass, hier Änderungen vorzunehmen. *[6], [7]*
 
 ### Datenbanksynchronisation
 Bei der Offline-Nutzung von CouchDB und PouchDB sind Synchronisationskonflikte ein zentrales Thema.
@@ -47,3 +47,21 @@ Diese Wahl fiel aufgrund mehrerer Faktoren: Vitest ist ein modernes, leichtgewic
 das sich nahtlos in Vue-Projekte integrieren lässt. Ergänzt durch die Vue Test Utils bietet es eine robuste Grundlage,
 um sowohl Unit-Tests als auch Integrationstests effizient zu implementieren.
 Die Einrichtung ist unkompliziert, was den Entwicklungsprozess erleichtert.
+
+
+
+## Resources
+
+- [1]: https://vuejs.org/api/; 19.03.2025
+
+- [2]: https://couchdb.apache.org/; 19.03.2025
+
+- [3]: https://pouchdb.com/
+
+- [4]: https://www.reddit.com/r/vuejs/comments/174h3m0/vue_2_vs_vue_3_what_are_the_major_differences_and/; 19.03.2025
+
+- [5]: https://shiftasia.com/community/difference-between-vuejs-2-and-3-when-to-use-them/; 19.03.2025
+
+- [6]: https://www.quora.com/What-are-the-pros-and-cons-of-CouchDB; 19.03.2025
+
+- [7]: https://www.joshmorony.com/creating-a-multiple-user-app-with-pouchdb-couchdb/; 19.03.2025
