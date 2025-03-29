@@ -32,13 +32,14 @@ Ersetze die Platzhalter durch deine tatsächlichen Werte. Die `.env`-Datei wird 
 
 ### Linux
 ```bash
-docker compose up --watch
+docker compose up couchdb -d
+npm run dev
 ```
 
 ### Windows
 ```bash
-docker-compose -f .\compose-windows.yaml up -d
-npm start
+docker-compose .\compose-windows.yaml up -d
+npm run dev
 ```
 
 Der Webserver läuft auf Port `8081`.
