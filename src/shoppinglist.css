@@ -60,7 +60,7 @@ body {
   text-align: center;
   font-size: 1.5em;
   font-weight: bold;
-  color: #3f51b5;
+  color: #161414;
   margin-bottom: 20px;
 }
 
@@ -84,7 +84,7 @@ body {
 
 .item-detail-checkbox label {
   font-size: 1em;
-  color: #757575;
+  color: #0e0c0c;
 }
 
 /* Actions-Styling */
