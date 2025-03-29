@@ -6,7 +6,10 @@
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "start": "node src/app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test:e2e": "start-server-and-test start http://localhost:8081 cy:run"
   },
   "repository": {
     "type": "git",
@@ -28,12 +31,8 @@
     "express": "^4.16.2"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "karma": "^2.0.5",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-mocha": "^1.3.0",
-    "mocha": "^5.0.0",
-    "nodemon": "^3.1.9"
+    "cypress": "^14.2.1",
+    "nodemon": "^3.1.9",
+    "start-server-and-test": "^2.0.11"
   }
 }

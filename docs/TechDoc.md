@@ -79,12 +79,10 @@ Dies ermöglicht eine hohe Portabilität, einfache Skalierbarkeit und eine konsi
 Für eine detaillierte Anleitung zum Aufsetzen und Bereitstellen der Anwendung verweisen wir auf das Dokument **[CONTRIBUTION.md](CONTRIBUTION.md)**.
 
 ## Testing
-Für das Testing der Anwendung setzen wir auf eine Kombination aus Karma und den Vue Test Utils.
-Diese Wahl fiel aufgrund mehrerer Faktoren: Karma ist ein bewährtes, flexibles und leistungsstarkes Test-Framework,
-das sich hervorragend in Vue-Projekte integrieren lässt und wurde schon im Template verwendet.
-Ergänzt durch die Vue Test Utils bietet es eine solide Grundlage,
-um sowohl Unit-Tests als auch Integrationstests effektiv umzusetzen.
-Die Einrichtung ist einfach und unterstützt den Entwicklungsprozess effizient.
+
+Für das Testing benutzen wir Cypress [12]. Cypress ist als Testing Framework sehr anfängerfreundlich und bietet
+E2E und Component Testing an. Es hat eine UI und sehr verständlichen testing Code, womit das Team gut arbeiten kann.
+Eine Anleitung, wie anfängt zu testen ist im Dokument **[CONTRIBUTION.md](./CONTRIBUTION.md)**
 
 ## Resources
 
@@ -110,3 +108,4 @@ Die Einrichtung ist einfach und unterstützt den Entwicklungsprozess effizient.
 
 - [11]: https://www.docker.com/; 26.03.2025
 
+- [12]: https://www.cypress.io/; 29.03.2025

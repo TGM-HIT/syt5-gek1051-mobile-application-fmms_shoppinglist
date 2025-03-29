@@ -50,6 +50,26 @@ Damit die Datenbank in der Web-App verwendet werden kann, müssen CORS aktiviert
 
 Am Ende kann die Datenbank in der Web-App genutzt werden. Der URL `https://127.0.0.1:5984/shopping-list` kann in der Web-App unter *Einstellungen* zum Synchronisieren angegeben werden.
 
+Hier ist eine sprachlich verbesserte Version des Textes:
+
+### Testing
+
+Für End-to-End-Tests (E2E) und Komponententests verwenden wir das Framework Cypress [9].
+
+Cypress lässt sich mit folgendem Befehl öffnen:
+
+```bash
+npm run cy:open
+```
+
+Die Tests können auch im Headless-Modus direkt aus dem Terminal ausgeführt werden:
+
+```bash
+npm run test:e2e
+```
+
+Eine Anleitung zum Schreiben von E2E-Tests findet ihr hier: [10]  
+Eine allgemeine Einführung sowie einen Überblick über Cypress-Konzepte gibt es hier: [11]
 
 ## Git Contribution Guidelines
 
@@ -131,3 +151,9 @@ WARNUNG: Wenn du nicht weißt, was du tust, melde dich bei beim Technical Archit
 [7] - https://git-scm.com/book/de/v2/Git-Branching-Rebasing; 29.03.2025
 
 [8] - https://nodejs.org/en/download; 29.03.2025
+
+[9] - https://docs.cypress.io/app/get-started/install-cypress; 29.03.2025
+
+[10] - https://docs.cypress.io/app/end-to-end-testing/writing-your-first-end-to-end-test; 29.03.2025
+
+[11] - https://docs.cypress.io/app/core-concepts/introduction-to-cypress; 29.03.2025
