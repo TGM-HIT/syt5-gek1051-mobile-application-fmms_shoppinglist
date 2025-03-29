@@ -1,3 +1,7 @@
+/**
+ * Author: Manuel Fellner
+ * Version: 29.03.2025
+ */
 describe('Shopping List Item Quantity & Unit Functionality', () => {
 
     beforeEach(() => {
