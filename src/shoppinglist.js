@@ -1,4 +1,3 @@
-
 // this will be the PouchDB database
 var db = new PouchDB('shopping');
 
@@ -110,7 +109,8 @@ var app = new Vue({
     places: [],
     selectedPlace: null,
     syncURL:'',
-    syncStatus: 'notsyncing'
+    syncStatus: 'notsyncing',
+    selectedItem: null, // Holds the currently selected item for detail view
   },
   // computed functions return data derived from the core data.
   // if the core data changes, then this function will be called too.
@@ -552,6 +552,29 @@ var app = new Vue({
        db.remove(match.doc).then((data) => {
          this.shoppingListItems.splice(match.i, 1);
        });
-     }
+    },
+
+    /**
+     * Called when the info button is clicked for a shopping list item.
+     * Sets the selected item and switches to the detail view mode.
+     * @param {Object} item
+     */
+    onShowItemDetail: function(item) {
+      this.selectedItem = JSON.parse(JSON.stringify(item));
+      this.mode = 'itemdetail';
+    },
+    /**
+     * Called when the Save button is clicked in the item detail view.
+     * Updates the item in PouchDB and the Vue model.
+     */
+    onSaveItemDetail: function() {
+      this.selectedItem.updatedAt = new Date().toISOString();
+      db.put(this.selectedItem).then((data) => {
+        this.selectedItem._rev = data.rev;
+        const match = this.findDoc(this.shoppingListItems, this.selectedItem._id);
+        Vue.set(this.shoppingListItems, match.i, this.selectedItem);
+        this.onBack();
+      });
+    },
   }
 })
