@@ -513,6 +513,7 @@ var app = new Vue({
         this.shoppingListItems.unshift(obj);
         this.newItemTitle = '';
       });
+      this.filteredSuggestions = [];
     },
 
     /**
