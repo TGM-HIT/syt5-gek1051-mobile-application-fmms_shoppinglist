@@ -6,7 +6,8 @@
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "start": "node src/app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "cy:open": "cypress open"
   },
   "repository": {
     "type": "git",
