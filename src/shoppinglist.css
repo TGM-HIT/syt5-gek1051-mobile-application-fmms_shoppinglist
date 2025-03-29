@@ -111,3 +111,11 @@ body {
 .cancel-button:hover {
   background-color: #e53935;
 }
+.input-small {
+  flex: 0 0 80px;
+  margin-right: 8px;
+}
+
+.input-wide {
+  flex: 1;
+}

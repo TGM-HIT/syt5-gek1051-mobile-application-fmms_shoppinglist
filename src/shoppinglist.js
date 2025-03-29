@@ -467,17 +467,22 @@ var app = new Vue({
      */
     onAddListItem: function() {
       if (!this.newItemTitle) return;
-      if (!this.newItemQuantity) return;
-      if (!this.newItemUnit) return;
+
       var obj = JSON.parse(JSON.stringify(sampleListItem));
       obj._id = 'item:' + cuid();
       obj.title = this.newItemTitle;
-      obj.quantity = this.newItemQuantity;
-      obj.unit = this.newItemUnit;
+
+      // Wenn keine Quantity eingegeben wurde → default auf 1
+      obj.quantity = this.newItemQuantity ? this.newItemQuantity : 1;
+
+      // Unit darf leer bleiben
+      obj.unit = this.newItemUnit || '';
+
       obj.list = this.currentListId;
       obj.createdAt = new Date().toISOString();
       obj.updatedAt = new Date().toISOString();
-      db.put(obj).then( (data) => {
+
+      db.put(obj).then((data) => {
         obj._rev = data.rev;
         this.shoppingListItems.unshift(obj);
         this.newItemTitle = '';

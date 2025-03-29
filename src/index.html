@@ -143,20 +143,18 @@
         <!-- shopping list item add form -->
         <md-list-item>
 
-          <md-input-container>
-            <md-input v-model="newItemQuantity" placeholder="New item quantity e.g. 1" @keyup.enter.native="onAddListItem"></md-input>
+          <md-input-container class="input-small">
+            <md-input v-model="newItemQuantity" placeholder="Quantity" @keyup.enter.native="onAddListItem"></md-input>
           </md-input-container>
 
-          <md-input-container>
-            <md-input v-model="newItemUnit" placeholder="New item unit e.g. liters" @keyup.enter.native="onAddListItem"></md-input>
+          <md-input-container class="input-small">
+            <md-input v-model="newItemUnit" placeholder="Unit" @keyup.enter.native="onAddListItem"></md-input>
           </md-input-container>
 
-          <!-- shopping item title -->
-          <md-input-container>
-            <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @keyup.enter.native="onAddListItem"></md-input>
+          <md-input-container class="input-wide">
+            <md-input v-model="newItemTitle" placeholder="Item name" @keyup.enter.native="onAddListItem"></md-input>
           </md-input-container>
 
-          <!-- shopping item add button -->
           <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0">
             <md-icon class="md-primary">add_shopping_cart</md-icon>
           </md-button>
