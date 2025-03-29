@@ -60,6 +60,12 @@ Cypress kann man mit diesem Command öffnen:
 npm run cy:open
 ```
 
+Die tests headless laufen lassen geht auch aus dem Terminal aus:
+
+```bash
+npm run test:e2e
+```
+
 Guide zum schreiben von E2E Tests findet ihr hier: [10]
 
 ## Git Contribution Guidelines
