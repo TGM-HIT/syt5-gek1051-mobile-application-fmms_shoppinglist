@@ -15,7 +15,7 @@ describe("Testing Item Checking functionality", () => {
 
     it('Triggers the checkbox on a created item', () => {
         // Add an item to the list
-        cy.get('[data-testid="input-new-item"').type('Eier');
+        cy.get('[data-testid="input-new-item"]').type('Eier');
         cy.get('[data-testid="btn-add-item"]').click()
 
         // Assert that the checkbox is checked
