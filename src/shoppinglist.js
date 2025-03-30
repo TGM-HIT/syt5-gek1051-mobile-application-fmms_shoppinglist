@@ -1,3 +1,11 @@
+import Vue from "vue";
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.css'
+
+import PouchDB from 'pouchdb'
+import findplugin from 'pouchdb-find'
+PouchDB.plugin(findplugin)
+
 // this will be the PouchDB database
 var db = new PouchDB('shopping');
 

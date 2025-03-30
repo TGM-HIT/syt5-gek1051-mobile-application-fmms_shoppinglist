@@ -10,6 +10,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      vue: 'vue/dist/vue.js',
+      pouchdb: "pouchdb/dist/pouchdb",
       '@': resolve(__dirname, 'src'),
     },
   },
