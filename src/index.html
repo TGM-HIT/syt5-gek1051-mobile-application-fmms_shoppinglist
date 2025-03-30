@@ -266,6 +266,20 @@
               <md-input placeholder="e.g http://localhost:5984/list" type="url" v-model="syncURL"></md-input>
             </md-input-container>  
 
+            <h4>Admin Data</h4>
+
+            <!-- Admin Username -->
+            <md-input-container>
+              <label>Admin Username</label>
+              <md-input placeholder="admin username" type="text" v-model="admin_username"></md-input>
+            </md-input-container>  
+
+            <!-- Admin Password -->
+            <md-input-container>
+              <label>Admin Password</label>
+              <md-input placeholder="admin password" type="password" v-model="admin_password"></md-input>
+            </md-input-container>
+
             <h4>Sync Status</h4>
 
             <!-- visualisation of sync status -->
@@ -287,6 +301,8 @@
           <md-card-header>User</md-card-header>
           <md-card-content>
             You can register and login as a user to edit your own shopping lists.
+
+            <h4>User Data</h4>
 
             <!-- Username -->
             <md-input-container>

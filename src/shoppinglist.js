@@ -114,14 +114,13 @@ var app = new Vue({
     places: [],
     selectedPlace: null,
     syncURL:'',
+    syncURLadmin: '',
     syncStatus: 'notsyncing',
+    admin_username: '',
+    admin_password: '',
     username: '',
     password: '',
-    loginStatus: 'notloggedin',
-    selectedItem: null, // Holds the currently selected item for detail view
-    newItemTitle:'',
-    dictionary: [],
-    filteredSuggestions: [],
+    loginStatus: 'notloggedin'
   },
   // computed functions return data derived from the core data.
   // if the core data changes, then this function will be called too.
@@ -202,6 +201,8 @@ var app = new Vue({
     }).then((data) => {
       // if we have settings, start syncing
       this.syncURL = data.syncURL;
+      this.admin_username = data.admin_username;
+      this.admin_password = data.admin_password;
       this.startSync();
     }).catch((e) => {})
 
@@ -251,7 +252,9 @@ var app = new Vue({
     onClickStartSync: function() {
       var obj = {
         '_id': '_local/user',
-        'syncURL': this.syncURL
+        'syncURL': this.syncURL,
+        'admin_username': this.admin_username,
+        'admin_password': this.admin_password
       };
       this.saveLocalDoc(obj).then( () => {
         this.startSync();
@@ -264,14 +267,17 @@ var app = new Vue({
      * so that the Vue.js model is kept in sync.
      */
     startSync: function() {
+      temp = this.syncURL.replace("http://", '');
+      this.syncURLadmin  = 'http://' + this.admin_username + ':' + this.admin_password + '@' + temp;
+
       this.syncStatus = 'notsyncing';
       if (this.sync) {
         this.sync.cancel();
         this.sync = null;
       }
-      if (!this.syncURL) { return; }
+      if (!this.syncURLadmin) { return; }
       this.syncStatus = 'syncing';
-      this.sync = db.sync(this.syncURL, {
+      this.sync = db.sync(this.syncURLadmin, {
         live: true,
         retry: false
       }).on('change', (info) => {
@@ -324,25 +330,12 @@ var app = new Vue({
           this.syncStatus = 'syncerror';
         }
       });;
+      this.db_usr = new PouchDB("http://" + this.admin_username + ':' + this.admin_password + '@' + temp.split("/")[0] + "/_users", {
+        skip_setup: true // `_users` ist eine spezielle System-Datenbank
+      });
     },
 
-    /**
-     * Called when the login button is pressed. The username and password
-     * are saved in PouchDB and the sync process is restarted.
-     */
-    onClickLogin: function() {
-        console.log('onClickLogin');
-        this.loginStatus = 'loggedin';
-    },
-    /**
-     * Called when the register button is pressed. The username and password
-     * are saved in PouchDB and the sync process is restarted.
-     */
-    onClickRegister: function() {
-        console.log('onClickRegister');
-        this.loginStatus = 'notloggedin';
-    },
-
+    
     /**
      */
     suggestWord: function() {
@@ -448,6 +441,50 @@ var app = new Vue({
         // switch mode
         this.onBack();
       });
+    },
+
+    /**
+     * Called when the login button is pressed. The username and password
+     * are saved in PouchDB and the sync process is restarted.
+     */
+    onClickLogin: function() {
+        console.log('onClickLogin');
+        this.loginStatus = 'loggedin';
+    },
+
+    /**
+     * Called when the register button is pressed. The username and password
+     * are saved in PouchDB and the sync process is restarted.
+     */
+    onClickRegister: function() {
+      // Erstelle ein Benutzerobjekt
+      const newUser = {
+        _id: "org.couchdb.user:" + this.username, // CouchDB Benutzer-ID Konvention
+        name: this.username,
+        password: this.password, // CouchDB speichert es intern verschlüsselt
+        roles: [],
+        type: "user",
+        createdAt: new Date().toISOString()
+      };
+
+      try {
+        // In die CouchDB _users Datenbank schreiben
+        const response = this.db_usr.put(newUser);
+
+        // Speichere die Revision (_rev), um spätere Updates zu ermöglichen
+        newUser._rev = response.rev;
+
+        // Bestätige den Erfolg
+        console.log("Benutzer erfolgreich angelegt!");
+
+        // Optional: Formular zurücksetzen
+        this.username = "";
+        this.password = "";
+
+      } catch (error) {
+        console.error("Fehler beim Erstellen des Benutzers:", error);
+        alert("Fehler beim Anlegen des Benutzers");
+      }
     },
 
     /**
