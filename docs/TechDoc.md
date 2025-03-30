@@ -1,27 +1,27 @@
 # Technische Dokumentation - FMMS
 
 ## Einleitung
+Diese Dokumentation beschreibt die technische Grundlage des ShoppingListe-FMMS-Projekts.
+Ziel ist es, einen detaillierten Überblick über den verwendeten Technologie-Stack zu geben sowie die getroffenen Entscheidungen und deren Hintergründe zu beleuchten.
+Dabei wird insbesondere auf die gewählten Technologien, Architekturentscheidungen, Deployment-Strategien sowie Testing-Ansätze eingegangen.
 Diese Dokumentation beschreibt die technische Grundlage des ShoppingListe-FMMS Projekts.
-Ziel ist es, einen Überblick über den verwendeten Technologie-Stack zu geben.
-
-Die folgenden Abschnitte bieten detaillierte Einblicke in die getroffenen Entscheidungen.
 
 ### Tech Stack
-- Vuejs 3 *[1]*
-- CouchDB *[2]* / PouchDB *[3]*
-- Docker [11]
-- Karma & Vue Test Utils [9][10]
+Das Projekt basiert auf einem modernen, jedoch bewährten Technologie-Stack, der Performance, Skalierbarkeit und Wartbarkeit gewährleistet.
+
+- VueJS 2 [1] - Als Frontend-Framework aufgrund der einfachen Integration und bestehender Codebasis.
+- CouchDB [2] / PouchDB [3] - Flexible NoSQL-Datenbanken zur Offline-Nutzung und Synchronisation.
+- Docker [11] - Containerisierung zur Vereinfachung von Deployment & Development
+- Cypress (E2E & Component Testing) [12] - Automatisiertes End-to-End-Testing.
 
 ## Web Framework
-Nach sorgfältiger Evaluierung haben wir uns entschieden, den bestehenden Technologie-Stack größtenteils beizubehalten,
-jedoch mit einer bedeutenden Änderung im Bereich des Web-Frameworks. Ursprünglich wurde **VueJS 2** eingesetzt, das Team hat jedoch beschlossen, auf **VueJS 3** umzusteigen. 
-Dieser Wechsel bringt zahlreiche Vorteile mit sich *[4], [5]*:
+Nach sorgfältiger Evaluierung haben wir uns entschieden, den bestehenden Technologie-Stack beizubehalten, einschließlich des aktuellen Web-Frameworks VueJS 2. Ursprünglich wurde ein Upgrade auf VueJS 3 in Betracht gezogen, jedoch haben mehrere Faktoren zu der Entscheidung geführt, bei VueJS 2 zu bleiben:
 
- - verbesserte Performance
- - moderne Features
- - eine bessere langfristige Unterstützung durch die Vue-Community
+- Hoher Migrationsaufwand: Vue Material wird in VueJS 3 nicht mehr unterstützt, was eine aufwendige Anpassungen erforderlich machen würde.
+- Fehlende Erfahrung: Im Team besteht begrenztes Wissen sowohl über VueJS 2 als auch über VueJS 3, was eine effiziente Migration erschwert.
+- Knapp bemessene Deadline: Die verfügbare Zeit reicht nicht aus, um die Migration sauber durchzuführen und gleichzeitig die Projektziele zu erreichen.
 
-Im Rahmen dieses Projekts wird daher die Vue-Version aktualisiert.
+Aufgrund dieser Herausforderungen wird das Projekt weiterhin auf VueJS 2 basieren.
 
 ## Datenbank
 Im Bereich der Datenbanken bleiben wir bei der bewährten Kombination aus **PouchDB** und **CouchDB**.
@@ -86,7 +86,7 @@ Eine Anleitung, wie anfängt zu testen ist im Dokument **[CONTRIBUTION.md](./CON
 
 ## Resources
 
-- [1]: https://vuejs.org/api/; 19.03.2025
+- [1]: https://v2.vuejs.org/; 19.03.2025
 
 - [2]: https://couchdb.apache.org/; 19.03.2025
 
