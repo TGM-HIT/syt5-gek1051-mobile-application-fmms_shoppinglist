@@ -7,7 +7,7 @@ It leverages PouchDB and CouchDB for seamless data synchronization,
 allowing users to manage their shopping lists efficiently across devices.
 
 
-**eam**: 
+**Team**: 
   - [Manuel Fellner](https://github.com/MfellnerDev), Product Owner
   
   - [Felix Dahmen](https://github.com/texotek), Technical Architect
