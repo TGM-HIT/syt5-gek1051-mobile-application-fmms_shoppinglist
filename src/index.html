@@ -142,7 +142,7 @@
           <!-- shopping item title -->
             <div style="flex: 1">
                 <md-input-container>
-                    <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @input="filterSuggestions" @keyup.enter.native="onAddListItem"></md-input>
+                    <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @input="filterSuggestions" @keyup.enter.native="onAddListItem" data-testid="input-new-item"></md-input>
                 </md-input-container>
                 <div v-if="filteredSuggestions.length" class="suggestions">
                     <div v-for="(word, index) in filteredSuggestions" :key="word" class="suggestion-word" @click="selectSuggestion(word)"> {{ word }} </div>
@@ -150,7 +150,7 @@
             </div>
 
           <!-- shopping item add button -->
-          <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0">
+          <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0" data-testid="btn-add-item">
             <md-icon class="md-primary">add_shopping_cart</md-icon>
           </md-button>
         </md-list-item>
@@ -160,7 +160,7 @@
 
           <!-- checkbox against each item -->
           <div>
-            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
+            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)" :data-testid="`checkbox-${item._id}`" ></md-checkbox>
           </div>
 
           <!-- shopping list item title -->
