@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.css'
+import cuid from "cuid";
 
 import PouchDB from 'pouchdb'
 import findplugin from 'pouchdb-find'
