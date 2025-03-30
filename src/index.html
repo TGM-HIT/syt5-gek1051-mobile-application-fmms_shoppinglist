@@ -51,11 +51,6 @@
         <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickAbout">
           <md-icon>info_outline</md-icon>
         </md-button>
-        <!-- user -->
-        <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickUser">
-          <md-icon>person</md-icon>
-        </md-button>
-
       </md-toolbar>
     </md-whiteframe> <!-- top bar -->
     
@@ -288,7 +283,7 @@
         </md-card> <!-- settings -->
 
       <!-- user -->
-      <md-card v-if="mode == 'user'">
+      <md-card v-if="mode == 'settings'">
           <md-card-header>User</md-card-header>
           <md-card-content>
             You can register and login as a user to edit your own shopping lists.
