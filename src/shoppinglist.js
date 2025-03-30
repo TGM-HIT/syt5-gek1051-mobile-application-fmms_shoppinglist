@@ -1,3 +1,12 @@
+import Vue, { createApp } from 'vue'
+import { createVuetify } from 'vuetify';
+import 'vuetify/styles';
+
+// import PouchDB from 'pouchdb'
+// import 'pouchdb-find'
+
+const vuetify = createVuetify()
+
 // this will be the PouchDB database
 var db = new PouchDB('shopping');
 
@@ -76,23 +85,15 @@ const ajax = function (url, querystring) {
   });
 };
 
-// Vue Material plugin
-Vue.use(VueMaterial);
 
-// Vue Material theme
-Vue.material.registerTheme('default', {
-  primary: 'blue',
-  accent: 'white',
-  warn: 'red',
-  background: 'grey'
-});
+
 
 // this is the Vue.js app. It contains
 // el - the HTML element where the app is rendered
 // data - the data the app needs to be rendered
 // computed - derived data required for the display logic
 // method - JavaScript functions
-var app = new Vue({
+var app = createApp({
   el: '#app',
   data: {
     lang: 'de',
@@ -608,3 +609,6 @@ var app = new Vue({
     },
   }
 })
+
+
+app.use(vuetify)

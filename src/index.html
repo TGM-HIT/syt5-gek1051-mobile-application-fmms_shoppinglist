@@ -12,333 +12,107 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="#448AFF">
   <meta name="apple-mobile-web-app-title" content="Shopping List">
 
-  <!-- Material Design icons and fonts  -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-  <!-- Material Design styles for Vue.js  -->
-  <link rel="stylesheet" href="https://unpkg.com/vue-material@0.7.4/dist/vue-material.css">
-
-  <!-- our styles -->
-  <link href="shoppinglist.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-
+  <!-- Vuetify -->
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.12/dist/vuetify.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.12/dist/vuetify.js"></script>
+  
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-
-  <!-- Vue app -->
-  <div id="app" class="app-viewport" v-cloak>    
-
-    <!-- top bar -->
-    <md-whiteframe md-elevation="3" class="main-toolbar">
-      <md-toolbar>
-        <!-- back button -->
-        <md-button class="md-icon-button" v-if="mode != 'showlist'" v-on:click="onBack">
-            <md-icon>arrow_back</md-icon>
-        </md-button>
-        
-        <!-- page title -->
-        <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
-        
-        <!-- save new shopping list button -->
-        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="singleList.title.length == 0">
-          <md-icon>check</md-icon>
-        </md-button>
-
-        <!-- settings -->
-        <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickSettings">
-          <md-icon>settings</md-icon>
-        </md-button>
-        <!-- about -->
-        <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickAbout">
-          <md-icon>info_outline</md-icon>
-        </md-button>
-
-      </md-toolbar>
-    </md-whiteframe> <!-- top bar -->
-    
-    <!-- main content -->
-    <main class="main-content">
-
-      <!-- add new shopping list form-->
-      <md-card v-if="mode == 'addlist'">
-        <md-card-header>Add Shopping List</md-card-header>
-        <md-card-content>
-          <!-- shopping list name -->
-          <md-input-container>
-            <label>List name</label>
-            <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
-          </md-input-container>   
+  <div id="app">
+    <v-app>
+      <v-app-bar app color="primary" dark>
+        <v-btn icon v-if="mode != 'showlist'" @click="onBack">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+        <v-toolbar-title>{{ pagetitle }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon v-if="mode == 'showlist'" @click="onClickSettings">
+          <v-icon>mdi-cog</v-icon>
+        </v-btn>
+        <v-btn icon v-if="mode == 'showlist'" @click="onClickAbout">
+          <v-icon>mdi-information-outline</v-icon>
+        </v-btn>
+      </v-app-bar>
+      
+      <v-main>
+        <v-container>
+          <!-- Add Shopping List -->
+          <v-card v-if="mode == 'addlist'">
+            <v-card-title>Add Shopping List</v-card-title>
+            <v-card-text>
+              <v-text-field label="List name" v-model="singleList.title"></v-text-field>
+              <v-text-field label="Place name" v-model="singleList.place.title"></v-text-field>
+              <v-btn :disabled="!singleList.place.title" @click="onClickLookup">Lookup</v-btn>
+              <v-select v-if="places.length > 1" label="Choose address" :items="places" item-text="display_name" item-value="place_id" v-model="selectedPlace" @change="onChangePlace"></v-select>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="primary" @click="onClickSaveShoppingList" :disabled="!singleList.title">Save</v-btn>
+            </v-card-actions>
+          </v-card>
           
-          <!-- shopping place name -->
-          <md-input-container>
-            <label>Place name</label>
-            <md-input placeholder="e.g. Whole Foods, Reno" v-model="singleList.place.title"></md-input>
-            <md-button class="md-raised" v-bind:disabled="singleList.place.title.length==0" v-on:click="onClickLookup">Lookup</md-button>             
-          </md-input-container>   
-
-          <!-- shopping place pull-down list -->
-          <md-input-container v-if="places.length > 1">
-            <label for="movie">Choose address</label>
-            <md-select v-bind="selectedPlace" v-on:change="onChangePlace" v-bind:disabled="places.length == 0">
-              <md-option v-for="place in places" :key="place.place_id" v-bind:value="place.place_id">{{ place.display_name }}</md-option>
-            </md-select>
-          </md-input-container>
-
-          <!-- shopping place road -->
-          <md-input-container v-if="singleList.place.address.road">
-            <label>Road</label>
-            <md-input readonly v-model="singleList.place.address.road"></md-input>
-          </md-input-container >
-
-          <!-- shopping place town -->
-          <md-input-container v-if="singleList.place.address.town">
-            <label>Town</label>
-            <md-input readonly v-model="singleList.place.address.town"></md-input>
-          </md-input-container >
-
-          <!-- shopping place city -->
-          <md-input-container v-if="singleList.place.address.city">
-            <label>City</label>
-            <md-input readonly v-model="singleList.place.address.city"></md-input>
-          </md-input-container >
-
-          <!-- shopping place state -->
-          <md-input-container v-if="singleList.place.address.state">
-            <label>State</label>
-            <md-input readonly v-model="singleList.place.address.state"></md-input>
-          </md-input-container >
-
-          <!-- shopping place address -->
-          <md-input-container v-if="singleList.place.address.postcode">
-            <label>Postcode</label>
-            <md-input readonly v-model="singleList.place.address.postcode"></md-input>
-          </md-input-container >
-
-          <!-- shopping place latitude -->
-          <md-input-container v-if="singleList.place.lat != null">
-            <label>Latitude</label>
-            <md-input readonly v-model="singleList.place.lat"></md-input>
-          </md-input-container> 
-            
-          <!-- shopping place longitude -->
-          <md-input-container v-if="singleList.place.lon != null">
-            <label>Longitude</label>
-            <md-input readonly v-model="singleList.place.lon"></md-input>
-          </md-input-container>  
-
-          <!-- shopping place licence -->
-          <md-input-container v-if="singleList.place.license">
-            <label>Licence</label>
-            <md-input readonly v-model="singleList.place.license"></md-input>
-          </md-input-container>  
+          <!-- Shopping List Items -->
+          <v-list v-if="mode == 'itemedit'">
+            <v-list-item>
+              <v-text-field label="New item" v-model="newItemTitle" @keyup.enter.native="onAddListItem"></v-text-field>
+              <v-btn icon @click="onAddListItem" :disabled="!newItemTitle">
+                <v-icon>mdi-cart-plus</v-icon>
+              </v-btn>
+            </v-list-item>
+            <v-divider></v-divider>
+            <v-list-item v-for="item in sortedShoppingListItems" :key="item._id">
+              <v-checkbox v-model="item.checked" @change="onCheckListItem(item._id)"></v-checkbox>
+              <v-list-item-content>
+                <v-list-item-title :class="{ cardchecked: item.checked }">{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+              <v-btn icon @click="onShowItemDetail(item)"><v-icon>mdi-information</v-icon></v-btn>
+              <v-btn icon @click="onDeleteItem(item._id)"><v-icon>mdi-delete</v-icon></v-btn>
+            </v-list-item>
+          </v-list>
           
-        </md-card-content>
-      </md-card> <!-- add new shopping list form -->
-
-      <!-- shopping list item editor -->
-      <md-list class="itemedit" v-if="mode == 'itemedit'">
-
-        <!-- shopping list item add form -->
-        <md-list-item>
-          <!-- shopping item title -->
-            <div style="flex: 1">
-                <md-input-container>
-                    <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @input="filterSuggestions" @keyup.enter.native="onAddListItem"></md-input>
-                </md-input-container>
-                <div v-if="filteredSuggestions.length" class="suggestions">
-                    <div v-for="(word, index) in filteredSuggestions" :key="word" class="suggestion-word" @click="selectSuggestion(word)"> {{ word }} </div>
-                </div>
-            </div>
-
-          <!-- shopping item add button -->
-          <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0">
-            <md-icon class="md-primary">add_shopping_cart</md-icon>
-          </md-button>
-        </md-list-item>
-
-        <!-- shopping list items -->
-        <md-list-item class="listitem" v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
-
-          <!-- checkbox against each item -->
-          <div>
-            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
-          </div>
-
-          <!-- shopping list item title -->
-          <div class="md-list-text-container">
-            <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
-          </div>
-
-          <!-- shopping list item detail button -->
-          <md-button v-on:click="onShowItemDetail(item)" class="md-icon-button md-list-action">
-            <md-icon>info</md-icon>
-          </md-button>
-
-          <!-- shopping list item delete button -->
-          <md-button v-on:click="onDeleteItem(item._id)" class="md-icon-button md-list-action">
-            <md-icon>cancel</md-icon>
-          </md-button>
-
-          <md-divider></md-divider>
-        </md-list-item>
-      </md-list> <!-- shopping list item editor -->
-
-      <!-- item detail view -->
-      <md-card v-if="mode == 'itemdetail'" class="item-detail-card">
-        <md-card-header class="item-detail-header">
-          <div class="item-detail-title">Item Details</div>
-        </md-card-header>
-        <md-card-content class="item-detail-content">
-          <!-- item title -->
-          <md-input-container class="item-detail-input">
-            <label>Item Name</label>
-            <md-input v-model="selectedItem.title"></md-input>
-          </md-input-container>
-
-          <!-- item checked status -->
-          <div class="item-detail-checkbox">
-            <md-checkbox v-model="selectedItem.checked" class="md-primary"></md-checkbox>
-            <label>Checked</label>
-          </div>
-        </md-card-content>
-
-        <md-card-actions class="item-detail-actions">
-          <!-- save button -->
-          <md-button class="save-button" v-on:click="onSaveItemDetail">Save</md-button>
-          <!-- cancel button -->
-          <md-button class="cancel-button" v-on:click="onBack">Cancel</md-button>
-        </md-card-actions>
-      </md-card>
-
-      <!-- list of shopping lists -->
-      <md-list v-if="mode == 'showlist'">
-        <md-card v-for="list in sortedShoppingLists" :key="list._id" :data-id="list._id">     
-          <md-card-header>
-            <!-- shopping list title -->
-            <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
-
-            <!-- shopping place title -->
-            <div class="md-subhead">{{ list.place.title }}</div>
-
-            <!-- 'speed dial' buttons -->
-            <md-speed-dial md-open="hover" md-direction="left" class="md-fab-top-right">
-
-              <!-- more ... button -->
-              <md-button class="md-fab" md-fab-trigger>
-                <md-icon md-icon-morph>more_vert</md-icon>
-                <md-icon>more_horiz</md-icon>
-              </md-button>
-            
-              <!-- edit button -->
-              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit(list._id, list.title)">
-                <md-icon>edit</md-icon>
-              </md-button>
-            
-              <!-- delete button -->
-              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete(list._id)">
-                <md-icon>delete</md-icon>
-              </md-button>
-            </md-speed-dial>
-          </md-card-header>
-
-          <!-- counts of numbers of items in the list and numbers checked e.g 4/10 -->
-          <md-card-content v-if="counts[list._id]">
-            {{ counts[list._id].checked }} / {{ counts[list._id].total }} 
-          </md-card-content>
-
-          <md-card-actions>
-            <!-- button to edit the list items -->
-            <md-button v-on:click="onClickList(list._id, list.title)">
-                <md-icon>chevron_right</md-icon>
-            </md-button>
-          </md-card-actions>
-        </md-card>
-      </md-list> <!-- list of shopping list -->
-
-      <!-- settings -->
-      <md-card v-if="mode == 'settings'">
-          <md-card-header>Settings</md-card-header>
-          <md-card-content>
-            You can sync your shopping lists to a remote Apache CouchDB, IBM Cloudant or PouchDB server. Supply the URL, including
-            credentials and database name and hit "Start Sync".
-
-            <!-- Cloudant URL -->
-            <md-input-container>
-              <label>Sync URL</label>
-              <md-input placeholder="e.g http://localhost:5984/list" type="url" v-model="syncURL"></md-input>
-            </md-input-container>  
-
-            <h4>Sync Status</h4>
-
-            <!-- visualisation of sync status -->
-            <md-chip v-if="syncStatus == 'notsyncing'">Not Syncing</md-chip>
-            <md-chip v-if="syncStatus == 'syncing'" class="md-primary">Syncing</md-chip>
-            <md-chip v-if="syncStatus == 'syncerror'" class="md-warn">Sync Error</md-chip>
-          </md-card-content>
-
-          <md-card-actions>
-            <!-- submit button that saves the Cloudant URL -->
-            <md-button v-on:click="onClickStartSync">
-                Start Sync
-            </md-button>
-          </md-card-actions> 
-        </md-card> <!-- settings -->
-
-      <!-- about -->
-      <md-card v-if="mode == 'about'">
-          <md-card-header>About</md-card-header>
-          <md-card-content>
-            <a href="https://github.com/ibm-watson-data-lab/shopping-list">Shopping List is a series of Offline First demo apps, each built using a different stack.</a> These demo apps cover Progressive Web Apps, hybrid mobile apps, native mobile apps, and desktop apps. This particular demo app is a <b>Progressive Web App</b> built using <b>Vue.js and PouchDB</b>. <a href="https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb">Get the source code.</a>
-          </md-card-content>
-
-          <md-card-actions>
-            <!-- No action -->
-          </md-card-actions> 
-      </md-card> <!-- about -->
-
-      <!-- floating 'add shopping list' button -->
-      <div class="floatingbutton" v-if="mode == 'showlist'">
-        <md-button class="md-fab md-primary md-raised" v-on:click="onClickAddShoppingList">
-          <md-icon>add</md-icon>
-        </md-button>
-      </div> <!-- floating 'add shopping list' button -->
-
-    </main> <!-- main content -->
-
-  </div> <!-- app -->
-
-  <!-- service worker -->
+          <!-- Shopping Lists -->
+          <v-list v-if="mode == 'showlist'">
+            <v-card v-for="list in sortedShoppingLists" :key="list._id">
+              <v-card-title>{{ list.title }}</v-card-title>
+              <v-card-subtitle>{{ list.place.title }}</v-card-subtitle>
+              <v-card-text>{{ counts[list._id].checked }} / {{ counts[list._id].total }}</v-card-text>
+              <v-card-actions>
+                <v-btn @click="onClickList(list._id, list.title)">View</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-list>
+        </v-container>
+      </v-main>
+      
+      <v-btn v-if="mode == 'showlist'" fab bottom right color="primary" @click="onClickAddShoppingList">
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </v-app>
+  </div>
+  
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('worker.js').then(function(registration) {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function(err) {
-          console.log('ServiceWorker registration failed: ', err);
-        });
+        navigator.serviceWorker.register('worker.js').then(
+          function(registration) {
+            console.log('ServiceWorker registered: ', registration.scope);
+          },
+          function(err) {
+            console.log('ServiceWorker registration failed: ', err);
+          }
+        );
       });
     }
   </script>
-
-  <!--  JavaScript Scripts-->
   
-  <!-- cuid - unique id generator -->
+  <!-- JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
-
-  <!-- PouchDB - in-browser database -->
   <script src="https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.find.min.js"></script>
 
-  <!-- Vue.js - framework that handles DOM/Model interaction -->
-  <script src="https://unpkg.com/vue@2.4.2/dist/vue.js"></script>
-
-   <!-- vue-material - Material Design for Vue.js -->
-   <script src="https://unpkg.com/vue-material@0.7.4/dist/vue-material.js"></script>
-
-  <!-- our code -->
-  <script src="shoppinglist.js"></script>
-
-  </body>
+  <script type="module" src="shoppinglist.js"></script>
+  
+</body>
 </html>
