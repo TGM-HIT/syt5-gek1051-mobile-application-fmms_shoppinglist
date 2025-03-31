@@ -16,9 +16,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-  <!-- Material Design styles for Vue.js  -->
-  <link rel="stylesheet" href="https://unpkg.com/vue-material@0.7.4/dist/vue-material.css">
-
   <!-- our styles -->
   <link href="shoppinglist.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
@@ -142,35 +139,33 @@
 
         <!-- shopping list item add form -->
         <md-list-item>
+          <!-- shopping item title -->
+            <div style="flex: 1">
+                <md-input-container>
+                    <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @input="filterSuggestions" @keyup.enter.native="onAddListItem" data-testid="input-new-item"></md-input>
+                </md-input-container>
+                <div v-if="filteredSuggestions.length" class="suggestions">
+                    <div v-for="(word, index) in filteredSuggestions" :key="word" class="suggestion-word" @click="selectSuggestion(word)"> {{ word }} </div>
+                </div>
+            </div>
 
-          <md-input-container class="input-small">
-            <md-input v-model="newItemQuantity" placeholder="Quantity" @keyup.enter.native="onAddListItem"></md-input>
-          </md-input-container>
-
-          <md-input-container class="input-small">
-            <md-input v-model="newItemUnit" placeholder="Unit" @keyup.enter.native="onAddListItem"></md-input>
-          </md-input-container>
-
-          <md-input-container class="input-wide">
-            <md-input v-model="newItemTitle" placeholder="Item name" @keyup.enter.native="onAddListItem"></md-input>
-          </md-input-container>
-
-          <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0">
+          <!-- shopping item add button -->
+          <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0" data-testid="btn-add-item">
             <md-icon class="md-primary">add_shopping_cart</md-icon>
           </md-button>
         </md-list-item>
 
         <!-- shopping list items -->
-        <md-list-item v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
+        <md-list-item class="listitem" v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
 
           <!-- checkbox against each item -->
           <div>
-            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)"></md-checkbox>
+            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)" :data-testid="`checkbox-${item._id}`" ></md-checkbox>
           </div>
 
           <!-- shopping list item title -->
           <div class="md-list-text-container">
-            <span v-bind:class="{ cardchecked: item.checked}">{{ item.quantity }} {{ item.unit }} {{ item.title }}</span>
+            <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
           </div>
 
           <!-- shopping list item detail button -->
@@ -326,21 +321,8 @@
 
   <!--  JavaScript Scripts-->
   
-  <!-- cuid - unique id generator -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
-
-  <!-- PouchDB - in-browser database -->
-  <script src="https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/pouchdb/pouchdb@6.3.4/dist/pouchdb.find.min.js"></script>
-
-  <!-- Vue.js - framework that handles DOM/Model interaction -->
-  <script src="https://unpkg.com/vue@2.4.2/dist/vue.js"></script>
-
-   <!-- vue-material - Material Design for Vue.js -->
-   <script src="https://unpkg.com/vue-material@0.7.4/dist/vue-material.js"></script>
-
   <!-- our code -->
-  <script src="shoppinglist.js"></script>
+  <script type="module" src="shoppinglist.js"></script>
 
   </body>
 </html>

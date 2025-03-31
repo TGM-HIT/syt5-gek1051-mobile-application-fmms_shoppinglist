@@ -4,12 +4,12 @@
   "description": "Offline first shopping list app built with Vue.js and PouchDB",
   "main": "src/app.js",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
     "test": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
-    "start": "node src/app.js",
-    "dev": "nodemon app.js",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:e2e": "start-server-and-test start http://localhost:8081 cy:run"
+    "test:e2e": "start-server-and-test dev http://localhost:8081 cy:run"
   },
   "repository": {
     "type": "git",
@@ -28,11 +28,18 @@
   },
   "homepage": "https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "cuid": "^3.0.0",
+    "vue": "^2.7.16",
+    "vue-material": "^0.7.5",
+    "pouchdb": "^9.0.0",
+    "pouchdb-find": "^9.0.0",
+    "events": "^3.3.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.3.3",
     "cypress": "^14.2.1",
-    "nodemon": "^3.1.9",
-    "start-server-and-test": "^2.0.11"
+    "start-server-and-test": "^2.0.11",
+    "vite": "^4.2.3",
+    "vue-template-compiler": "^2.7.16"
   }
 }

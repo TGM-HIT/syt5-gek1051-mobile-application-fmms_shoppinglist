@@ -1,16 +1,11 @@
-# Run as a non-privileged user
-FROM node:22
-EXPOSE 8081
-
-RUN useradd -ms /bin/sh -u 1001 app
-USER app
-
+FROM node:18-buster AS builder
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install --verbose
+COPY . .
+RUN npm run build
 
-# Copy source files
-COPY --chown=app:app . /app
-
-# Install dependencies
-RUN npm install
-
-ENTRYPOINT ["npm", "start"]
+FROM nginx:alpine AS runner
+COPY --from=builder /app/src/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

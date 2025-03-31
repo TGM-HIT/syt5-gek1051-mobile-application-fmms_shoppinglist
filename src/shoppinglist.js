@@ -1,3 +1,12 @@
+import Vue from "vue";
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.css'
+import cuid from "cuid";
+
+import PouchDB from 'pouchdb'
+import findplugin from 'pouchdb-find'
+PouchDB.plugin(findplugin)
+
 // this will be the PouchDB database
 var db = new PouchDB('shopping');
 
@@ -25,8 +34,6 @@ const sampleListItem = {
   "type": "item",
   "version": 1,
   "title": "",
-  "quantity": 1,
-  "unit": "",
   "checked": false,
   "createdAt": "",
   "updatedAt": ""
@@ -97,20 +104,21 @@ Vue.material.registerTheme('default', {
 var app = new Vue({
   el: '#app',
   data: {
+    lang: 'de',
     mode: 'showlist',
     pagetitle: 'Shopping Lists',
     shoppingLists: [],
     shoppingListItems: [],
     singleList: null,
     currentListId: null,
-    newItemTitle:'',
-    newItemQuantity:'',
-    newItemUnit:'',
     places: [],
     selectedPlace: null,
     syncURL:'',
     syncStatus: 'notsyncing',
     selectedItem: null, // Holds the currently selected item for detail view
+    newItemTitle:'',
+    dictionary: [],
+    filteredSuggestions: [],
   },
   // computed functions return data derived from the core data.
   // if the core data changes, then this function will be called too.
@@ -194,6 +202,7 @@ var app = new Vue({
       this.startSync();
     }).catch((e) => {})
 
+    this.loadDictionary();
   },
   methods: {
     /**
@@ -461,34 +470,59 @@ var app = new Vue({
     },
 
     /**
+     * Loads the dictionary of words for the current language
+     */
+    async loadDictionary() {
+        try {
+            const response = await fetch('./assets/dictionary/items-' + this.lang + '.txt');
+            const text = await response.text();
+            this.dictionary = text.split('\n').map(word => word.trim()).filter(word => word.length > 0);
+            console.log("loaded dictionary with (" + this.lang + ")", this.dictionary.length, "words");
+        } catch (error) {
+            console.error('Error loading dictionary:', error);
+        }
+    },
+    /**
+     * Filters the dictionary of words based on the current input
+     */
+    filterSuggestions() {
+        const query = this.newItemTitle.toLowerCase();
+        if (!query) {
+            this.filteredSuggestions = [];
+            return;
+        }
+        this.filteredSuggestions = this.dictionary.filter(word => word.toLowerCase().startsWith(query));
+        this.highlightedIndex = -1;
+    },
+    /**
+     * Selects a suggestion from the filtered list
+     * it selects the clicked word
+     * @param {String} word
+     */
+    selectSuggestion(word) {
+        this.newItemTitle = word;
+        this.filteredSuggestions = [];
+    },
+
+    /**
      * Called when a new shopping list item is added. A new shopping list item
      * object is created with a unique id. It is written to PouchDB and added
      * to Vue's shoppingListItems array
      */
     onAddListItem: function() {
       if (!this.newItemTitle) return;
-
       var obj = JSON.parse(JSON.stringify(sampleListItem));
       obj._id = 'item:' + cuid();
       obj.title = this.newItemTitle;
-
-      // Wenn keine Quantity eingegeben wurde → default auf 1
-      obj.quantity = this.newItemQuantity ? this.newItemQuantity : 1;
-
-      // Unit darf leer bleiben
-      obj.unit = this.newItemUnit || '';
-
       obj.list = this.currentListId;
       obj.createdAt = new Date().toISOString();
       obj.updatedAt = new Date().toISOString();
-
-      db.put(obj).then((data) => {
+      db.put(obj).then( (data) => {
         obj._rev = data.rev;
         this.shoppingListItems.unshift(obj);
         this.newItemTitle = '';
-        this.newItemQuantity = '';
-        this.newItemUnit = '';
       });
+      this.filteredSuggestions = [];
     },
 
     /**
