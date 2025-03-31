@@ -25,7 +25,7 @@
 <body>
 
   <!-- Vue app -->
-  <div id="app" class="app-viewport" v-cloak>    
+  <div id="app" class="app-viewport" v-cloak>
 
     <!-- top bar -->
     <md-whiteframe md-elevation="3" class="main-toolbar">
@@ -34,10 +34,10 @@
         <md-button class="md-icon-button" v-if="mode != 'showlist'" v-on:click="onBack">
             <md-icon>arrow_back</md-icon>
         </md-button>
-        
+
         <!-- page title -->
         <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
-        
+
         <!-- save new shopping list button -->
         <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="singleList.title.length == 0">
           <md-icon>check</md-icon>
@@ -54,7 +54,7 @@
 
       </md-toolbar>
     </md-whiteframe> <!-- top bar -->
-    
+
     <!-- main content -->
     <main class="main-content">
 
@@ -66,14 +66,14 @@
           <md-input-container>
             <label>List name</label>
             <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
-          </md-input-container>   
-          
+          </md-input-container>
+
           <!-- shopping place name -->
           <md-input-container>
             <label>Place name</label>
             <md-input placeholder="e.g. Whole Foods, Reno" v-model="singleList.place.title"></md-input>
-            <md-button class="md-raised" v-bind:disabled="singleList.place.title.length==0" v-on:click="onClickLookup">Lookup</md-button>             
-          </md-input-container>   
+            <md-button class="md-raised" v-bind:disabled="singleList.place.title.length==0" v-on:click="onClickLookup">Lookup</md-button>
+          </md-input-container>
 
           <!-- shopping place pull-down list -->
           <md-input-container v-if="places.length > 1">
@@ -117,20 +117,20 @@
           <md-input-container v-if="singleList.place.lat != null">
             <label>Latitude</label>
             <md-input readonly v-model="singleList.place.lat"></md-input>
-          </md-input-container> 
-            
+          </md-input-container>
+
           <!-- shopping place longitude -->
           <md-input-container v-if="singleList.place.lon != null">
             <label>Longitude</label>
             <md-input readonly v-model="singleList.place.lon"></md-input>
-          </md-input-container>  
+          </md-input-container>
 
           <!-- shopping place licence -->
           <md-input-container v-if="singleList.place.license">
             <label>Licence</label>
             <md-input readonly v-model="singleList.place.license"></md-input>
-          </md-input-container>  
-          
+          </md-input-container>
+
         </md-card-content>
       </md-card> <!-- add new shopping list form -->
 
@@ -138,22 +138,43 @@
       <md-list class="itemedit" v-if="mode == 'itemedit'">
 
         <!-- shopping list item add form -->
-        <md-list-item>
-          <!-- shopping item title -->
-            <div style="flex: 1">
-                <md-input-container>
-                    <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @input="filterSuggestions" @keyup.enter.native="onAddListItem" data-testid="input-new-item"></md-input>
-                </md-input-container>
-                <div v-if="filteredSuggestions.length" class="suggestions">
-                    <div v-for="(word, index) in filteredSuggestions" :key="word" class="suggestion-word" @click="selectSuggestion(word)"> {{ word }} </div>
-                </div>
-            </div>
+          <md-list-item class="item-input-row">
+              <md-input-container class="input-small">
+                  <md-input v-model="newItemQuantity" placeholder="Quantity" @keyup.enter.native="onAddListItem"></md-input>
+              </md-input-container>
 
-          <!-- shopping item add button -->
-          <md-button class="md-icon-button md-list-action" v-on:click="onAddListItem" v-bind:disabled="newItemTitle.length == 0" data-testid="btn-add-item">
-            <md-icon class="md-primary">add_shopping_cart</md-icon>
-          </md-button>
-        </md-list-item>
+              <md-input-container class="input-small">
+                  <md-input v-model="newItemUnit" placeholder="Unit" @keyup.enter.native="onAddListItem"></md-input>
+              </md-input-container>
+
+              <div class="input-wide suggestion-wrapper">
+                  <md-input-container>
+                      <md-input
+                              v-model="newItemTitle"
+                              placeholder="Item name"
+                              @input="filterSuggestions"
+                              @keyup.enter.native="onAddListItem"
+                      ></md-input>
+                  </md-input-container>
+                  <div v-if="filteredSuggestions.length" class="suggestions">
+                      <div
+                              v-for="(word, index) in filteredSuggestions"
+                              :key="word"
+                              class="suggestion-word"
+                              @click="selectSuggestion(word)"
+                      >
+                          {{ word }}
+                      </div>
+                  </div>
+              </div>
+
+
+              <md-button class="md-icon-button md-list-action" @click="onAddListItem" :disabled="newItemTitle.length == 0">
+                  <md-icon class="md-primary">add_shopping_cart</md-icon>
+              </md-button>
+          </md-list-item>
+
+
 
         <!-- shopping list items -->
         <md-list-item class="listitem" v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
@@ -165,7 +186,7 @@
 
           <!-- shopping list item title -->
           <div class="md-list-text-container">
-            <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
+              <span :class="{ cardchecked: item.checked }">{{ item.quantity }} {{ item.unit }} {{ item.title }}</span>
           </div>
 
           <!-- shopping list item detail button -->
@@ -193,6 +214,16 @@
             <label>Item Name</label>
             <md-input v-model="selectedItem.title"></md-input>
           </md-input-container>
+            <!-- Item Quantity -->
+            <md-input-container class="item-detail-input">
+                <label>Item Quantity</label>
+                <md-input v-model="selectedItem.quantity"></md-input>
+            </md-input-container>
+            <!-- Item Unit -->
+            <md-input-container class="item-detail-input">
+                <label>Item Unit</label>
+                <md-input v-model="selectedItem.unit"></md-input>
+            </md-input-container>
 
           <!-- item checked status -->
           <div class="item-detail-checkbox">
@@ -211,7 +242,7 @@
 
       <!-- list of shopping lists -->
       <md-list v-if="mode == 'showlist'">
-        <md-card v-for="list in sortedShoppingLists" :key="list._id" :data-id="list._id">     
+        <md-card v-for="list in sortedShoppingLists" :key="list._id" :data-id="list._id">
           <md-card-header>
             <!-- shopping list title -->
             <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
@@ -227,12 +258,12 @@
                 <md-icon md-icon-morph>more_vert</md-icon>
                 <md-icon>more_horiz</md-icon>
               </md-button>
-            
+
               <!-- edit button -->
               <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit(list._id, list.title)">
                 <md-icon>edit</md-icon>
               </md-button>
-            
+
               <!-- delete button -->
               <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete(list._id)">
                 <md-icon>delete</md-icon>
@@ -242,7 +273,7 @@
 
           <!-- counts of numbers of items in the list and numbers checked e.g 4/10 -->
           <md-card-content v-if="counts[list._id]">
-            {{ counts[list._id].checked }} / {{ counts[list._id].total }} 
+            {{ counts[list._id].checked }} / {{ counts[list._id].total }}
           </md-card-content>
 
           <md-card-actions>
@@ -265,7 +296,7 @@
             <md-input-container>
               <label>Sync URL</label>
               <md-input placeholder="e.g http://localhost:5984/list" type="url" v-model="syncURL"></md-input>
-            </md-input-container>  
+            </md-input-container>
 
             <h4>Sync Status</h4>
 
@@ -280,7 +311,7 @@
             <md-button v-on:click="onClickStartSync">
                 Start Sync
             </md-button>
-          </md-card-actions> 
+          </md-card-actions>
         </md-card> <!-- settings -->
 
       <!-- about -->
@@ -292,7 +323,7 @@
 
           <md-card-actions>
             <!-- No action -->
-          </md-card-actions> 
+          </md-card-actions>
       </md-card> <!-- about -->
 
       <!-- floating 'add shopping list' button -->
@@ -320,7 +351,7 @@
   </script>
 
   <!--  JavaScript Scripts-->
-  
+
   <!-- our code -->
   <script type="module" src="shoppinglist.js"></script>
 
