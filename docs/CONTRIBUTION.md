@@ -19,7 +19,7 @@ Um am Projekt mitzuarbeiten, solltest du deine Entwicklungsumgebung entsprechend
 - **Node.js und npm (Optional)**: Nur erforderlich auf Windows
     - Installation: [8] oder via Linux Package Manger
 
-## Deployment
+## Development Setup
 
 Erstelle eine `.env`-Datei im Root-Verzeichnis des Projektes mit folgendem Inhalt:
 
@@ -27,28 +27,23 @@ Erstelle eine `.env`-Datei im Root-Verzeichnis des Projektes mit folgendem Inhal
 COUCHDB_USER=user
 COUCHDB_PASSWORD=password
 ```
-
 Ersetze die Platzhalter durch deine tatsächlichen Werte. Die `.env`-Datei wird in der `docker-compose`-Datei verwendet, um die Umgebungsvariablen für CouchDB zu setzen. Die Datenbank kann durch das docker-compose-File gestartet werden:
 
-### Linux
+Um zu entwickeln musst du mit docker compose den `couchdb` container starten.
+Dies machst du mit docker compose.
+
 ```bash
-docker compose up couchdb -d
+docker compose up -d
 npm run dev
 ```
-
-### Windows
-```bash
-docker-compose .\compose-windows.yaml up -d
-npm run dev
-```
-
 Der Webserver läuft auf Port `8081`.
 
 Die Datenbank wird durch die `docker-compose`-Datei initialisiert. Das `docker-compose`-File erstellt eine Datenbank namens `shopping-list`.
 
 Damit die Datenbank in der Web-App verwendet werden kann, müssen CORS aktiviert werden. Dafür sorgt die Datei `local.ini`.
 
-Am Ende kann die Datenbank in der Web-App genutzt werden. Der URL `https://127.0.0.1:5984/shopping-list` kann in der Web-App unter *Einstellungen* zum Synchronisieren angegeben werden.
+Am Ende kann die Datenbank in der Web-App genutzt werden. Der URL `https://127.0.0.1:5984/shopping-list`
+kann in der Web-App unter *Einstellungen* zum Synchronisieren angegeben werden.
 
 Hier ist eine sprachlich verbesserte Version des Textes:
 
@@ -63,13 +58,50 @@ npm run cy:open
 ```
 
 Die Tests können auch im Headless-Modus direkt aus dem Terminal ausgeführt werden:
-
 ```bash
 npm run test:e2e
 ```
 
 Eine Anleitung zum Schreiben von E2E-Tests findet ihr hier: [10]  
 Eine allgemeine Einführung sowie einen Überblick über Cypress-Konzepte gibt es hier: [11]
+
+## Deployment
+
+Das Deployment erfolgt über ein Docker-Image und den Webserver `nginx`.
+Im Repository befindet sich ein Dockerfile, das das Docker-Image für die Anwendung erstellt.
+
+### Schritt 1: Docker-Image bauen
+
+Zuerst muss das Docker-Image gebaut werden. Führe dazu den folgenden Befehl aus:
+
+```bash
+docker build --network host -t fmms-shoppinglist .
+```
+
+Der Befehl baut das Image mit dem Tag `fmms-shoppinglist` und stellt sicher, dass die Docker-Build-Prozesse das lokale Netzwerk verwenden, um auf erforderliche Ressourcen zuzugreifen.
+
+### Schritt 2: Docker-Container starten
+
+Um die Anwendung zu starten, führe den folgenden Befehl aus:
+
+```bash
+docker run -p 8080:80 fmms-shoppinglist
+```
+
+Dieser Befehl startet einen Docker-Container aus
+dem zuvor erstellten Image und mappt den Port 8080 auf den internen Port 80 des Containers.
+
+```
+docker build --network host -t fmms-shoppinglist .
+```
+
+Um das image laufen zu lassen kann man diesen befehl ausführen:
+
+```
+docker run -p 8080:80 fmms-shoppinglist
+```
+
+Die Anwendung ist nun unter `http://localhost:8080` erreichbar.
 
 ## Git Contribution Guidelines
 
