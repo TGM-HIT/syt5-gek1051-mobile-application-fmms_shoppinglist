@@ -385,3 +385,43 @@ We have the following Cypress Test Cases:
             });
     });
 ```
+
+
+## Sync Status
+
+Here's a **concise version** of your **Sync Status Feature Documentation**:
+
+---
+
+## **Sync Status Feature**
+
+### **Description**
+The **Sync Status** feature displays the current sync state (`notsyncing`, `syncing`, `syncerror`) using Material Design chips in the UI. It updates based on the sync process with CouchDB.
+
+### **Backend Implementation**
+- The `startSync()` method in Vue triggers synchronization with CouchDB via PouchDB.  
+- The sync status is updated (`notsyncing`, `syncing`, `syncerror`) based on sync events.
+
+```javascript
+startSync: function() {
+  this.sync = db.sync(this.syncURL, { live: true, retry: false })
+    .on('change', () => { /* update sync status */ })
+    .on('error', () => { this.syncStatus = 'syncerror'; });
+}
+```
+
+### **Frontend Implementation**
+- Displays sync status as `md-chip` components depending on `syncStatus`.
+- Hidden in **Settings** or **About** modes.
+
+```vue
+<md-chip v-if="syncStatus == 'notsyncing'">Not Syncing</md-chip>
+<md-chip v-if="syncStatus == 'syncing'" class="md-success">Syncing</md-chip>
+<md-chip v-if="syncStatus == 'syncerror'" class="md-warn">Sync Error</md-chip>
+```
+
+### **Test Cases**
+- **"Not Syncing"** when `syncStatus` is `notsyncing`
+- **"Syncing"** when `syncStatus` is `syncing`
+- **"Sync Error"** when `syncStatus` is `syncerror`
+- Sync status chips should be hidden in **Settings** and **About** modes.
