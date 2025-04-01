@@ -592,6 +592,13 @@ var app = new Vue({
          this.shoppingListItems.splice(match.i, 1);
        });
     },
+    
+    onBackToList: function() {
+      this.mode = 'itemedit'; // Wechsle zurück zur Listenansicht
+      // Optional: Stelle sicher, dass die richtige Liste angezeigt wird
+      this.currentListId = this.selectedItem.list;
+      this.selectedItem = null; // Leere das ausgewählte Item
+    },
 
     /**
      * Called when the info button is clicked for a shopping list item.
@@ -612,7 +619,7 @@ var app = new Vue({
         this.selectedItem._rev = data.rev;
         const match = this.findDoc(this.shoppingListItems, this.selectedItem._id);
         Vue.set(this.shoppingListItems, match.i, this.selectedItem);
-        this.onBack();
+        this.onBackToList();
       });
     },
   }
