@@ -387,12 +387,6 @@ We have the following Cypress Test Cases:
 ```
 
 
-## Sync Status
-
-Here's a **concise version** of your **Sync Status Feature Documentation**:
-
----
-
 ## **Sync Status Feature**
 
 ### **Description**
