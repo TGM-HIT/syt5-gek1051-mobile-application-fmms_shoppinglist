@@ -116,6 +116,8 @@ var app = new Vue({
     syncURL:'',
     syncURLadmin: '',
     syncStatus: 'notsyncing',
+    newItemTitle: '',
+    filteredSuggestions: [],
     admin_username: '',
     admin_password: '',
     username: '',
@@ -215,13 +217,6 @@ var app = new Vue({
      */
     onClickSettings: function() {
       this.mode = 'settings';
-    },
-    /**
-     * Called when the user button is pressed. Sets the mode
-     * to 'user' so the Vue displays the user panel.
-     */
-    onClickUser: function() {
-      this.mode = 'user';
     },
     /**
      * Called when the about button is pressed. Sets the mode
