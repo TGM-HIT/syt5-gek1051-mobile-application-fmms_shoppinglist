@@ -76,3 +76,68 @@ The Detail View allows users to view, edit, and save details of a specific shopp
         </md-card-actions>
       </md-card>
     ```
+## Grouping Items by Category
+
+### Description
+This feature organizes shopping list items by their assigned categories. It enhances the user experience by providing a structured view of items, making it easier to locate and manage them.
+
+---
+
+### Backend Implementation
+#### Methods in `shoppinglist.js`
+1. **`groupedShoppingListItems` (Computed Property)**
+   - Groups the `shoppingListItems` array by the `category` field.
+   - Returns an object where each key is a category, and the value is an array of items in that category.
+   - **Code Snippet**:
+     ```javascript
+     groupedShoppingListItems: function() {
+       const grouped = {};
+       for (const item of this.shoppingListItems) {
+         if (!grouped[item.category]) {
+           grouped[item.category] = [];
+         }
+         grouped[item.category].push(item);
+       }
+       return grouped;
+     }
+     ```
+
+---
+
+### Frontend Implementation
+#### Grouped Items Display
+- **Location**: Inside the shopping list item editor (`mode == 'itemedit'`).
+- **Purpose**: Displays items grouped by their categories.
+- **Code Snippet**:
+  ```html
+  <!-- grouped shopping list items -->
+        <template v-for="(items, category) in groupedShoppingListItems">
+          <md-subheader>{{ category }}</md-subheader>
+          <md-list-item class="listitem" v-for="item in items" :key="item._id" v-if="item.list == currentListId">
+
+            <!-- checkbox against each item -->
+            <div>
+              <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)" :data-testid="`checkbox-${item._id}`"></md-checkbox>
+            </div>
+
+            <!-- shopping list item title -->
+            <div class="md-list-text-container">
+              <span v-bind:class="{ cardchecked: item.checked }">{{ item.title }}</span>
+            </div>
+
+              <!-- shopping list item detail button -->
+              <md-button v-on:click="onShowItemDetail(item)" class="md-icon-button md-list-action" :data-testid="`btn-item-detail-${item.title}`">
+                <md-icon>info</md-icon>
+              </md-button>
+
+            <!-- shopping list item delete button -->
+            <md-button v-on:click="onDeleteItem(item._id)" class="md-icon-button md-list-action">
+              <md-icon>cancel</md-icon>
+            </md-button>
+
+            <md-divider></md-divider>
+          </md-list-item>
+        </template>
+      </md-list> <!-- shopping list item editor -->
+    ```
+ 
