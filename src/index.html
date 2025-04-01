@@ -208,6 +208,14 @@
             <md-input v-model="selectedItem.title" data-testid="input-item-title"></md-input>
           </md-input-container>
 
+          <!-- item category -->
+          <md-input-container class="item-detail-input">
+            <label>Category</label>
+            <md-select v-model="selectedItem.category" data-testid="select-item-category">
+              <md-option v-for="category in categories" :key="category" :value="category">{{ category }}</md-option>
+            </md-select>
+          </md-input-container>
+
           <!-- item checked status -->
           <div class="item-detail-checkbox">
             <md-checkbox v-model="selectedItem.checked" class="md-primary" data-testid="checkbox-item-checked"></md-checkbox>

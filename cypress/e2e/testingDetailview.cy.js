@@ -26,23 +26,48 @@ describe("Testing Item Detail View functionality", () => {
         cy.get('[data-testid="input-item-title"]').should('have.value', 'Eier');
     });
 
-
     it('Cancels changes in the detail view', () => {
-        // Open the detail view of the item
+        // Open the detail view
         cy.get('[data-testid="btn-item-detail-Eier"]').click();
 
         // Attempt to update the item title
-        const updatedTitle = 'Milch';
-        cy.get('[data-testid="input-item-title"]').clear().type(updatedTitle);
-
-        // Cancel the changes
+        cy.get('[data-testid="input-item-title"]').clear().type('Milch');
         cy.get('[data-testid="btn-cancel-item-detail"]').click();
 
-        // Verify the original title is still displayed in the list
-        cy.get('.md-list-text-container').should('contain.text', 'Eier');
+        // Assert that the original title is still displayed in the list
+        cy.contains('Eier').should('exist');
+        cy.contains('Milch').should('not.exist');
+    });
 
-        // Verify the updated title does not exist
-        cy.get('.md-list-text-container').should('not.contain.text', updatedTitle);
+    it('should allow changing the category of an item in the detail view', () => {
+        // Add a new item
+        const itemTitle = 'Cheese';
+        const initialCategory = 'Dairy';
+        const newCategory = 'Other';
+
+        cy.get('[data-testid="input-new-item"]').type(itemTitle);
+        cy.get('.category-select').click();
+        cy.contains('.md-option', initialCategory).click();
+        cy.get('[data-testid="btn-add-item"]').click();
+
+        // Wait for the DOM to update
+        cy.wait(500);
+
+        // Open item detail view
+        cy.contains('.listitem', itemTitle)
+          .find('[data-testid^="btn-item-detail"]') // Adjusted selector to ensure it matches the correct button
+          .click();
+
+        // Change category
+        cy.get('[data-testid="select-item-category"]').click();
+        cy.contains('.md-option', newCategory).click();
+
+        // Save changes
+        cy.get('[data-testid="btn-save-item-detail"]').click();
+
+        // Verify category change
+        cy.contains('.md-list .md-subheader', newCategory).should('exist');
+        cy.contains('.listitem span', itemTitle).should('exist');
     });
 
     afterEach(() => {
