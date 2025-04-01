@@ -1,12 +1,14 @@
 # Technische Dokumentation - FMMS
 
 ## Einleitung
+
 Diese Dokumentation beschreibt die technische Grundlage des ShoppingListe-FMMS-Projekts.
 Ziel ist es, einen detaillierten Überblick über den verwendeten Technologie-Stack zu geben sowie die getroffenen Entscheidungen und deren Hintergründe zu beleuchten.
 Dabei wird insbesondere auf die gewählten Technologien, Architekturentscheidungen, Deployment-Strategien sowie Testing-Ansätze eingegangen.
 Diese Dokumentation beschreibt die technische Grundlage des ShoppingListe-FMMS Projekts.
 
 ### Tech Stack
+
 Das Projekt basiert auf einem modernen, jedoch bewährten Technologie-Stack, der Performance, Skalierbarkeit und Wartbarkeit gewährleistet.
 
 - VueJS 2 [1] - Als Frontend-Framework aufgrund der einfachen Integration und bestehender Codebasis.
@@ -15,6 +17,7 @@ Das Projekt basiert auf einem modernen, jedoch bewährten Technologie-Stack, der
 - Cypress [12] - Automatisiertes End-to-End-Testing.
 
 ## Web Framework
+
 Nach sorgfältiger Evaluierung haben wir uns entschieden, den bestehenden Technologie-Stack beizubehalten, einschließlich des aktuellen Web-Frameworks VueJS 2. Ursprünglich wurde ein Upgrade auf VueJS 3 in Betracht gezogen, jedoch haben mehrere Faktoren zu der Entscheidung geführt, bei VueJS 2 zu bleiben:
 
 - Hoher Migrationsaufwand: Vue Material wird in VueJS 3 nicht mehr unterstützt, was eine aufwendige Anpassungen erforderlich machen würde.
@@ -27,7 +30,372 @@ Als Frontend-UI-Framework setzen wir auf **Vue Material** [13], das auf Basis vo
 
 Es ist jedoch wichtig zu beachten, dass **Vue Material** mittlerweile als veraltet gilt und offiziell als **deprecated** markiert wurde. Der Hauptgrund dafür ist, dass Vue Material nur noch **Vue 2** unterstützt und nicht mit der neueren Version **Vue 3** kompatibel ist. Das bedeutet, dass künftige Updates, Verbesserungen und Sicherheitsfixes für Vue Material nicht mehr garantiert werden. Für zukünftige Projekte oder Weiterentwicklungen könnte es sinnvoll sein, auf modernere Alternativen umzusteigen, die die neueste Version von Vue unterstützen und aktiv gewartet werden.
 
+## Dokumentation der verwendeten Schnittstellen
+
+Im Projekt wurden mehrere interne VueJS-Schnittstellen (siehe [1]), aber auch externe Schnittstellen wie zum Beispiel die Nominatim API [15] von Openstreetmap verwendet.
+
+### VueJS-Schnittstellen
+
+Laut dem `package.json` File, verwendet diese Applikation die Folgende Vue-Version:
+
+```json
+    "vue": "^2.7.16",
+    "vue-material": "^0.7.5",
+```
+
+Das bedeutet, dass die zu verwendene API-Dokumentation die folgende ist: [16]
+
+Ebenso wird, wie hier ersichtlich ist, das `Vue Material` Theme mit der Version `0.7.5` verwendet.
+
+Gehen wir aber genauer darauf an, welche spezifischen Funktionalitäten wir von VueJS zwei in unserem Projkt verwenden:
+
+[prompt-1]
+
+#### Erstellen der App-Instanz
+
+Der folgende Code ist dafür verantwortlich, dass die Vue-App-Instanz erstellt wird:
+
+```javascript
+var app = new Vue({
+  el: '#app',
+  data: { ... },
+  computed: { ... },
+  methods: { ... },
+  created: function() { ... }
+});
+```
+
+*shoppinglist.js, Zeile 104*
+
+Hierbei ist besonders auf `el: '#app'` achtzugeben. Diese bindet die Vue-Instanz an das HTML-Element mit der ID `#app'. [17]
+
+
+#### data - Reaktive Datenquelle
+
+Das `data`-Objekt enthält alle reaktiven Daten des UI-Zustands. Also alles, was man auf dem Bildschirm sieht (Inputs, Texte, Listen, etc.) basieren auf die Werte, die hier gespeichert sind.
+
+Ebenso sind die Werte **reaktiv**, heißt: Wenn sich heir etwas ändert, passt sich die Benutzeroberfläche automatisch an. [18]
+
+```javascript
+data: {
+  mode: 'showlist',
+  shoppingLists: [],
+  shoppingListItems: [],
+  singleList: null,
+  currentListId: null,
+  syncURL: '',
+  syncStatus: 'notsyncing',
+  selectedItem: null,
+  newItemTitle: '',
+  dictionary: [],
+  filteredSuggestions: []
+}
+```
+
+*shoppinglist.js, Zeile 106*
+
+Zu "spüren" sind diese Werte zum Beispiel beim folgenden:
+- Wenn man eine Einkaufsliste erstellt, wird diese direkt in `shoppingLists` gespeichert und damit auch sofort angezeigt
+- Wenn man `mode = 'addList` konfiguriert (siehe `index.html`), zeigt Vue automatisch das Formular zum Hinzufügen an.
+
+
+#### computed - Abgeleitete Daten
+
+Folgender Code:
+
+```javascript
+computed: {
+  counts: function() {
+    var obj = {};
+    // count #items and how many are checked
+    for(var i in this.shoppingListItems) {
+      var d = this.shoppingListItems[i];
+      if (!obj[d.list]) {
+        obj[d.list] = { total: 0, checked: 0};
+      }
+      obj[d.list].total++;
+      if (d.checked) {
+        obj[d.list].checked++;
+      }
+    }
+    return obj;
+  }
+}
+```
+
+*shoppinglist.js, Zeile 125-146*
+
+Das Stichwort `computed`: automatisch berechnete Werte, die auf dem `data`-Zustand basieren. Es wird keine eigene Logik im Template geschrieben - Vue übernimmt hier das rechnen bzw. auswerten der Daten. [19]
+
+Hierbei haben wir jetzt z.B. die `counts` Methode in der `computed` Section, welche den folgenden Sinn hat:
+- Alle Elemente in der jeweiligen Shoppingliste werden bei jeder Änderung gezählt. Dies inkludiert das Zählen von nicht-gecheckten, aber auch gecheckten Elementen.
+
+#### methods - die "Butons" der App
+
+Folgender Code:
+
+```javascript
+methods: {
+    onClickSettings: function () {
+        this.mode = 'settings';
+    },
+  
+    onClickAbout: function () {
+        this.mode = 'about';
+    }
+}
+```
+
+*shoppinglist.js, Zeile 207 - 221*
+
+Hier werden alle Funktionen definiert, die auf Benutzerinteraktion reagieren. Zum Beispiel, wenn jemand auf einen Button klickt, einen Eintrag erstellt oder löscht. [20]
+
+In diesem Fall haben wir zwei Methoden, welche den Modus wechseln. Damit werden dem Benutzer zum Beispiel
+bem auslösen der `onClickSettings` Methode die Einstellungen und beim auslösen der `onClickAbout` die About-Einträge angezeigt.
+
+Beispiele aus der App:
+
+| Methode                   | Funktion         |
+|---------------------------|------------------|
+| `onClickAddShoppingList`  |     Öffnet Formular für neue Liste             |
+| `onClickSaveShoppingList` |        Speichert Liste lokal in PouchDB          |
+| `onAddListItem`           |    Fügt neuen Artikel hinzu              |
+| `onCheckListItem`         |    Aktualisiert, ob ein Artikel "erledigt" ist              |
+| `onClickStartSync`        |     Startet die Synchronisierung mit CouchDB             |
+| `onClickLookup`                          |    Ruft die OpenStreetMap-API auf              |
+|  `onChangePlace`                         |      Trägt Ort, Straße, Stadt usw. in die Liste ein            |
+
+
+#### Lifecycle Hook: created()
+
+Folgener Code:
+
+```javascript
+created: function() {
+
+    // create database index on 'type'
+    db.createIndex({ index: { fields: ['type'] }}).then(() => {
+      
+      // load all 'list' items 
+      var q = {
+        selector: {
+          type: 'list'
+        }
+      };
+      return db.find(q);
+    }).then((data) => {
+
+      // write the data to the Vue model, and from there the web page
+      app.shoppingLists = data.docs;
+
+      // get all of the shopping list items
+      var q = {
+        selector: {
+          type: 'item'
+        }
+      };
+      return db.find(q);
+    }).then((data) => {
+      // write the shopping list items to the Vue model
+      app.shoppingListItems = data.docs;
+
+      // load settings (Cloudant sync URL)
+      return db.get('_local/user');
+    }).then((data) => {
+      // if we have settings, start syncing
+      this.syncURL = data.syncURL;
+      this.startSync();
+    }).catch((e) => {})
+
+    this.loadDictionary();
+  }
+```
+
+*shoppinglist.js, Zeile 169 - 206*
+
+`created()` wird einmal aufgerufen, wenn die App startet. [20] Es ist damit ideal, um:
+
+- Daten aus der Datenbank zu laden (Zeile 174 - 193)
+- den Anfangszustand einiger Attribute festzulegen
+- Konfigurationen vorzunehmen
+
+Was passiert hier bei uns im Projekt? Folgendes:
+
+- Vorhandene Einkaufslisten + Items werden aus der PouchDB geladen
+- (falls vorhanden) Gespeicherte Sync-URL wird geladen
+- (falls URL vorhanden ist) Der CouchDB-Sync wird gestartet
+- Das Wörterbuch für die Auto-suggestion Funktionalität wird geladen
+
+#### Vue Materials + Themes
+
+Wir erwenden hier im Projekt Vue Material [21], um ein einheitliches Theme zu gewährleisten.
+
+Dies wird im Code in der folgenden Sektion gemacht:
+
+```javascript
+import VueMaterial from 'vue-material'
+...
+
+// Vue Material plugin
+Vue.use(VueMaterial);
+```
+
+*shoppinglist.js, Zeile 2 und Zeile 89*
+
+Dies ermöglicht die Verwendung von Material Design Komponenten wie z.B.:
+
+- `<md-button>`
+- `<md-card>`
+- `<md-input-container>`
+- `<md-icon>`
+- `<md-toolbar>`
+
+Für genuere Informationen zu den Material Design Komponenten siehe [23].
+
+Die Theme-Konfiguration findet nun folgendermaßen statt:
+
+```javascript
+Vue.material.registerTheme('default', {
+  primary: 'blue',
+  accent: 'white',
+  warn: 'red',
+  background: 'grey'
+});
+```
+
+*shoppinglist.js, Zeile 92 - 97*
+
+Dadurch wird gewährleistet, dass wir ein einheitliches Styling verteilt über alle Komponenten haben.
+
+- `primary` steuert z.B. die Farbe von Buttons
+
+Diese Werte sind beliebig Anpassbar.
+
+#### Vue Directives - Verbindng zwischen Vue (Daten) und UI
+
+Im `index.html` Files werden, so wie es standardmäßig ist, sogenannte Vue Directives [24] verwendet.
+
+Diese ermöglichen es, in HTML Dokumenten eine Verbindung zwischen der UI (also den HTMl Elementen) und der Datenverwaltung (also der Vue Applikation).
+
+Im `index.html` File werden zum Großteil die folgenden Directives verwendet:
+
+
+| Directive    | Funktion für App                                                                                                              |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------|
+| `v-model`    | two-way Bindung zwischen Vue Daten (`data`) und dem Eingabefeld                                                               |
+| `v-if`       | Ermöglicht if-Verzweigungen anhand Zustände der Daten (also kann z.B. auch ganze Bereiche ausblenden)                         |
+| `v-for`      | Ermöglicht for-loops (kann also z.B. wiederholt alle Elemente anzeigen, alle Items)                                           |
+| `v-on:click` | Event-Listener für Clicks                                                                                                     |
+| `v-bind`     | Bindet dynamische Werte an Attribte                                                                                           |
+| `v-cloak`    | Verhindert "unformatierte Anzeige" bevor Vue geladen ist (zeigt den Content also immer nur erst dann her, wenn Vue geladen ist) | |
+
+Im Code sieht das zum Beispiel folgendermaßen aus:
+
+```html
+        <!-- shopping list items -->
+<md-list-item class="listitem" v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
+
+  <!-- checkbox against each item -->
+  <div>
+    <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)" :data-testid="`checkbox-${item._id}`" ></md-checkbox>
+  </div>
+
+  <!-- shopping list item title -->
+  <div class="md-list-text-container">
+    <span v-bind:class="{ cardchecked: item.checked}">{{ item.title }}</span>
+  </div>
+```
+
+*index.html, Zeile 158 - 169*
+
+Hier werden Directives verwendet:
+  - `v-for & v-if`: Hir werden alle sortieren Items aus der ShoppingListe angezeigt, solange sie aus der `currentList` stammen
+  - Danach wird die Verbindung zum `checked` (also "eingekauft") Attribut mittels `v-model` geact, wobei dann direkt auch ein `v-on:change` Eventlistener angewendet wird
+  - Danach wird mitels `v-bind` der korrekte Checkbox-Status und Item Name angezeigt
+
+### OpenStreetMap API (Nominatim)
+
+Das Projekt verwendet ebenso die OpenStreetMap API namnes Nominatim. [25]
+
+Diese wird folgenderweise im Projekt eingebunden:
+
+```javascript
+    /**
+     * Called when the Lookup button is pressed. We make an API call to 
+     * OpenStreetMap passing in the user-supplied name of the place. If
+     * the API returns something, the options are added to Vue's "places"
+     * array and become a pull-down list of options on the front end.
+     */
+    onClickLookup: function() {
+
+      // make request to the OpenStreetMap API
+      var url = 'https://nominatim.openstreetmap.org/search';
+      var qs = {
+        format: 'json',
+        addressdetails: 1, 
+        namedetails: 1,
+        q: this.singleList.place.title
+      };
+      ajax(url, qs).then((d) => {
+
+        // add the list of places to our list
+        this.places = d;
+
+        // if there is only one item in the list
+        if (d.length ==1) {
+          // simulate selection of first and only item
+          this.onChangePlace(d[0].place_id);
+        }
+      });
+
+    }
+```
+
+Diese Funktion befindet sich im `methods` Bereich der Vue App und wird deshalb auch von einem Button ausgelöst.
+
+Im Endeffekt wird die API dafür verwendet, um Ortsnamen, welche der Benutzer eingibt nachzuschlagen und dem Benutzer nach einem Klick auf den "Lookup" Button einen passenden Ort, welcher wirklich existiert, vorschlägt.
+
+### CouchDB / Cloudant Sync
+
+Wir verwenden die PouchDB Sync Funktionalität:
+
+```javascript
+/**
+     * Called when the sync process is to start. Initiates a PouchDB to
+     * to Cloudant two-way sync and listens to the changes coming in
+     * from the Cloudant feed. We need to monitor the incoming change
+     * so that the Vue.js model is kept in sync.
+     */
+    startSync: function() {
+      this.syncStatus = 'notsyncing';
+      if (this.sync) {
+        this.sync.cancel();
+        this.sync = null;
+      }
+      if (!this.syncURL) { return; }
+      this.syncStatus = 'syncing';
+      this.sync = db.sync(this.syncURL, {
+        live: true,
+        retry: false
+      }).on('change', (info) => {
+          // ...
+      }
+```
+
+*shoppinglist.js, Zeile 250 - 267*
+
+Hierbei wird die lokale Datenbank (`PouchDB`) mit einer externen Datenbank synchronisiert. Dies ist in unserem Use-Case z.B. die Synhronisierung
+der Shoppingliste über mehrere Clients. Hierfür kann man einen PouchDB server angeben, welcher sichergeht, dass alle lokalen 
+Instanzen auf dem gleichen Stand sind. [14]
+
+Änderungen an Listen oder Items werden automatisch hochgeladen oder heruntergeladen.
+
+Dies bedeutet, dass die Applikation auch ohne Internet funktioniert. Sie speichert nämlich alles erstmals lokal und dann, falls wieder eine Internetverbindung besteht, wird die Synchronisierung, falls die URL angegeben ist, gewagt.
+
+
+
 ## Datenbank
+
 Im Bereich der Datenbanken bleiben wir bei der bewährten Kombination aus **PouchDB** und **CouchDB**.
 Diese Technologien haben sich als stabil und gut geeignet für die Anforderungen des Projekts erwiesen,
 insbesondere durch ihre Fähigkeit zur Offline-Synchronisation und flexiblen Datenverwaltung.
@@ -37,34 +405,33 @@ Da sie weiterhin den Bedürfnissen des Systems entsprechen, sehen wir derzeit ke
 
 **ShoppingList - Einkaufsliste:**
 
-| Feld          | Typ            | Beschreibung                                                                 |
-|---------------|----------------|------------------------------------------------------------------------------|
-| `_id`         | `String`       | Eindeutige Identifikationsnummer der Einkaufsliste (z. B. UUID oder MongoDB-ID). |
-| `type`        | `String`       | Typ des Objekts, festgelegt auf `"list"`, um es als Einkaufsliste zu kennzeichnen. |
-| `version`     | `Number`       | Versionsnummer der Einkaufsliste (z. B. für Schema-Updates, hier fest `1`).  |
-| `title`       | `String`       | Titel oder Name der Einkaufsliste (z. B. "Wocheneinkauf").                  |
-| `checked`     | `Boolean`      | Gibt an, ob die gesamte Liste als erledigt markiert ist (Standard: `false`). |
-| `place`       | `Object`       | Enthält Informationen über den Ort, der mit der Liste verknüpft ist.        |
-| `place.title` | `String`       | Name des Ortes (z. B. "Supermarkt XYZ").                                   |
-| `place.license` | `String \| null` | Lizenzinformationen des Ortes (z. B. für Karten-Daten), standardmäßig `null`. |
-| `place.lat`   | `Number \| null` | Breitengrad (Latitude) des Ortes, standardmäßig `null`.                   |
-| `place.lon`   | `Number \| null` | Längengrad (Longitude) des Ortes, standardmäßig `null`.                   |
-| `place.address` | `Object`     | Adressdetails des Ortes (z. B. Straße, Stadt), standardmäßig leer.         |
-| `createdAt`   | `String`       | Zeitstempel der Erstellung (z. B. ISO 8601: `"2025-03-26T12:00:00Z"`).      |
-| `updatedAt`   | `String`       | Zeitstempel der letzten Aktualisierung (z. B. ISO 8601).                    |
-
+| Feld            | Typ              | Beschreibung                                                                       |
+| --------------- | ---------------- | ---------------------------------------------------------------------------------- |
+| `_id`           | `String`         | Eindeutige Identifikationsnummer der Einkaufsliste (z. B. UUID oder MongoDB-ID).   |
+| `type`          | `String`         | Typ des Objekts, festgelegt auf `"list"`, um es als Einkaufsliste zu kennzeichnen. |
+| `version`       | `Number`         | Versionsnummer der Einkaufsliste (z. B. für Schema-Updates, hier fest `1`).        |
+| `title`         | `String`         | Titel oder Name der Einkaufsliste (z. B. "Wocheneinkauf").                         |
+| `checked`       | `Boolean`        | Gibt an, ob die gesamte Liste als erledigt markiert ist (Standard: `false`).       |
+| `place`         | `Object`         | Enthält Informationen über den Ort, der mit der Liste verknüpft ist.               |
+| `place.title`   | `String`         | Name des Ortes (z. B. "Supermarkt XYZ").                                           |
+| `place.license` | `String \| null` | Lizenzinformationen des Ortes (z. B. für Karten-Daten), standardmäßig `null`.      |
+| `place.lat`     | `Number \| null` | Breitengrad (Latitude) des Ortes, standardmäßig `null`.                            |
+| `place.lon`     | `Number \| null` | Längengrad (Longitude) des Ortes, standardmäßig `null`.                            |
+| `place.address` | `Object`         | Adressdetails des Ortes (z. B. Straße, Stadt), standardmäßig leer.                 |
+| `createdAt`     | `String`         | Zeitstempel der Erstellung (z. B. ISO 8601: `"2025-03-26T12:00:00Z"`).             |
+| `updatedAt`     | `String`         | Zeitstempel der letzten Aktualisierung (z. B. ISO 8601).                           |
 
 **ShoppingList-Item - Eintrag in der ShoppingListe**
 
-| Feld          | Typ            | Beschreibung                                                                 |
-|---------------|----------------|------------------------------------------------------------------------------|
-| `_id`         | `String`       | Eindeutige Identifikationsnummer des Listenelements (z. B. UUID oder MongoDB-ID). |
-| `type`        | `String`       | Typ des Objekts, festgelegt auf `"item"`, um es als Listenelement zu kennzeichnen. |
-| `version`     | `Number`       | Versionsnummer des Elements (z. B. für Schema-Updates, hier fest `1`).      |
-| `title`       | `String`       | Name oder Beschreibung des Elements (z. B. "Milch" oder "Brot").            |
-| `checked`     | `Boolean`      | Gibt an, ob das Element als erledigt markiert ist (Standard: `false`).      |
-| `createdAt`   | `String`       | Zeitstempel der Erstellung (z. B. ISO 8601: `"2025-03-26T12:00:00Z"`).      |
-| `updatedAt`   | `String`       | Zeitstempel der letzten Aktualisierung (z. B. ISO 8601).                    |
+| Feld        | Typ       | Beschreibung                                                                       |
+| ----------- | --------- | ---------------------------------------------------------------------------------- |
+| `_id`       | `String`  | Eindeutige Identifikationsnummer des Listenelements (z. B. UUID oder MongoDB-ID).  |
+| `type`      | `String`  | Typ des Objekts, festgelegt auf `"item"`, um es als Listenelement zu kennzeichnen. |
+| `version`   | `Number`  | Versionsnummer des Elements (z. B. für Schema-Updates, hier fest `1`).             |
+| `title`     | `String`  | Name oder Beschreibung des Elements (z. B. "Milch" oder "Brot").                   |
+| `checked`   | `Boolean` | Gibt an, ob das Element als erledigt markiert ist (Standard: `false`).             |
+| `createdAt` | `String`  | Zeitstempel der Erstellung (z. B. ISO 8601: `"2025-03-26T12:00:00Z"`).             |
+| `updatedAt` | `String`  | Zeitstempel der letzten Aktualisierung (z. B. ISO 8601).                           |
 
 #### Einträge erstellen & löschen
 
@@ -73,11 +440,13 @@ Beim Erstellen von **Shopping-Listen** und **List Items** werden die neuen Eintr
 Wenn eine Liste oder ein Item lokal gelöscht wird, erfolgt dies direkt in der entsprechenden Array-Struktur der Anwendung. Das Löschen wird durch Entfernen des Eintrags aus dem jeweiligen Array realisiert. Anschließend wird die Änderung durch den Synchronisationsprozess an die entfernte Datenbank weitergegeben, sodass die Löschung auch auf anderen Geräten oder Instanzen der Anwendung reflektiert wird. Dieser Prozess stellt sicher, dass alle Änderungen sowohl lokal als auch in der Cloud konsistent bleiben.
 
 ### Datenbanksynchronisation
+
 PouchDB bietet hierfür eine elegante Lösung, indem es eine bidirektionale Synchronisation mit CouchDB ermöglicht [14]. Diese Dokumentation beschreibt das Konzept der Synchronisation und zeigt, wie Änderungen effizient verwaltet werden können.
 
 Die Synchronisation zwischen PouchDB und CouchDB erfolgt über die `sync`-Methode, die in Echtzeit (`live: true`) oder als einmalige Abgleichsoperation genutzt werden kann. Dabei wird zwischen eingehenden (`pull`) und ausgehenden (`push`) Änderungen unterschieden.
 
 #### Initialisierung der Synchronisation
+
 Bevor eine Synchronisation gestartet wird, muss sichergestellt werden, dass keine vorherige Instanz aktiv ist. Anschließend wird die Verbindung zum CouchDB-Server aufgebaut:
 
 ```javascript
@@ -93,6 +462,7 @@ let syncHandler = db.sync(remoteDB, {
 Hierbei sorgt `live: true` dafür, dass Änderungen kontinuierlich synchronisiert werden. `retry: true` stellt sicher, dass unterbrochene Verbindungen automatisch wiederhergestellt werden.
 
 #### Verarbeitung eingehender Änderungen
+
 Wenn Änderungen vom Server eintreffen, müssen sie überprüft und in der lokalen Datenbank aktualisiert werden. Dies geschieht über das `change`-Ereignis. Zunächst wird durch alle eingegangenen Dokumente iteriert:
 
 ```javascript
@@ -209,3 +579,36 @@ Weitere Informationen zur Implementierung von Tests befinden sich in **[CONTRIBU
 - [13]: https://www.creative-tim.com/vuematerial; 31.03.2025
 
 - [14]: https://pouchdb.com/guides/replication.html; 31.03.2025
+
+- [15]: https://nominatim.openstreetmap.org/ui/search.html; 01.04.2025
+
+- [16]: https://v2.vuejs.org/v2/api/; 01.04.2025
+
+- [17]: https://v2.vuejs.org/v2/api/#el; 01.04.2025
+
+- [18]: https://v2.vuejs.org/v2/api/#data; 01.04.2025
+
+- [19]: https://v2.vuejs.org/v2/api/#computed; 01.04.2025
+
+- [20]: https://v2.vuejs.org/v2/api/#methods; 01.04.2025
+
+- [21]: https://v2.vuejs.org/v2/api/#created; 01.04.2025
+
+- [22]: https://www.creative-tim.com/vuematerial/; 01.04.2025
+
+- [23]: https://www.creative-tim.com/vuematerial/components/app; 01.04.2025
+
+- [24]: https://v2.vuejs.org/v2/api/#Directives; 01.04.2025
+ 
+- [25]: https://nominatim.openstreetmap.org/ui/search.html; 01.04.2025
+
+## Prompts
+
+- [prompt-1]: 
+  
+  ```
+  VueJS, Technical documentation. Wir haben das folgende Projekt, welches VueJS 2.7.16 verwendet: [insert code of index.html and shoppinglist.js].
+  Nun möchte ich in markdown eine Dokumentation der verwendeten Schnittstellen machen. Also der Vue-API-Schnittstellen, die das Projekt verwendet
+  ```
+
+  - 01.04.2025;ChatGPT by OpenAI; mfellner@tutanota.com
