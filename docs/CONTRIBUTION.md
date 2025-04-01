@@ -91,16 +91,6 @@ docker run -p 8080:80 fmms-shoppinglist
 Dieser Befehl startet einen Docker-Container aus
 dem zuvor erstellten Image und mappt den Port 8080 auf den internen Port 80 des Containers.
 
-```
-docker build --network host -t fmms-shoppinglist .
-```
-
-Um das image laufen zu lassen kann man diesen befehl ausführen:
-
-```
-docker run -p 8080:80 fmms-shoppinglist
-```
-
 Die Anwendung ist nun unter `http://localhost:8080` erreichbar.
 
 ## Git Contribution Guidelines
