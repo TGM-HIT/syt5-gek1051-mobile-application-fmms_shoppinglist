@@ -230,13 +230,22 @@
        * @param {Object} doc
        * @returns {Promise}
        */
-      saveLocalDoc: function(doc) {
-        return db.get(doc._id).then((data) => {
-          doc._rev = data._rev;
-          return db.put(doc);
-        }).catch((e) => {
-          return db.put(doc);
-        });
+      saveLocalDoc: async function(doc) {
+        try {
+          const existing = await db.get(doc._id);
+          doc._rev = existing._rev;
+          await db.put(doc);
+        } catch (e) {
+          // Falls Dokument noch nicht existiert → neu anlegen
+          if (e.status === 404) {
+            await db.put(doc);
+          } else {
+            console.error("Fehler beim Speichern:", e);
+          }
+        }
+
+        // Nach dem Speichern direkt prüfen, ob es Konflikte gibt
+        await this.resolveConflicts(doc._id);
       },
       /**
        * Called when save button on the settings panel is clicked. The
@@ -623,12 +632,83 @@
        */
       onSaveItemDetail: function() {
         this.selectedItem.updatedAt = new Date().toISOString();
+
         db.put(this.selectedItem).then((data) => {
           this.selectedItem._rev = data.rev;
+
           const match = this.findDoc(this.shoppingListItems, this.selectedItem._id);
           Vue.set(this.shoppingListItems, match.i, this.selectedItem);
+
+          // Nach dem Speichern: Auf Konflikte prüfen und ggf. auflösen
+          this.resolveConflicts(this.selectedItem._id);
+
           this.onBack();
         });
+      },
+      /**
+       * Holt alle Konflikt-Revisions eines Dokuments, wendet eine Merge-Strategie an
+       * (z. B. latest wins) und speichert das Ergebnis als neue Version.
+       * Danach werden die alten Konflikt-Revs gelöscht.
+       *
+       * @param {String} docId
+       */
+      async resolveConflicts(docId) {
+        try {
+          const mainDoc = await db.get(docId, { conflicts: true });
+
+          if (!mainDoc._conflicts || mainDoc._conflicts.length === 0) return;
+
+          const conflictDocs = await Promise.all(
+              mainDoc._conflicts.map(rev => db.get(docId, { rev }))
+          );
+
+          const allVersions = [mainDoc, ...conflictDocs];
+          const merged = this.mergeItemVersions(allVersions);
+
+          // speichere gemergten Eintrag auf Basis der aktuellsten Revision
+          merged._id = mainDoc._id;
+          merged._rev = mainDoc._rev;
+
+          const response = await db.put(merged);
+
+          // Konflikte löschen
+          await Promise.all(
+              mainDoc._conflicts.map(rev => db.remove(docId, rev))
+          );
+
+          console.log("Konflikt gemergt für", docId);
+        } catch (err) {
+          console.error("Fehler beim Konflikt-Merge:", err);
+        }
+      },
+
+      /**
+       * Führt ein intelligentes Feld-basiertes Merging durch:
+       * Für jedes Feld wird der Wert der Revision genommen, die bei diesem Feld zuletzt geändert wurde.
+       * @param {Array} versions - z. B. [mainDoc, conflict1, conflict2]
+       * @returns {Object} - gemergter finaler Datensatz
+       */
+      mergeItemVersions(versions) {
+        const fieldsToMerge = ['title', 'itemQuantity', 'itemUnit', 'checked'];
+        const result = { ...versions[0] };
+
+        // Gehe jedes Feld durch
+        fieldsToMerge.forEach(field => {
+          let latestValue = result[field];
+          let latestUpdatedAt = result.updatedAt;
+
+          versions.forEach(v => {
+            if (v[field] !== undefined && v.updatedAt > latestUpdatedAt) {
+              latestValue = v[field];
+              latestUpdatedAt = v.updatedAt;
+            }
+          });
+
+          result[field] = latestValue;
+        });
+
+        result.updatedAt = new Date().toISOString();
+        return result;
       },
     }
   })
