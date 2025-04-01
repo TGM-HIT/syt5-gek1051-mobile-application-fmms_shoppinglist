@@ -47,9 +47,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Tag Docker image for GitHub Container Registry
-      run: |
-        docker tag fmms-shoppingliste:$(date +%s) ghcr.io/${{ github.repository }}/fmms-shoppingliste:latest
+      run: docker tag fmms-shoppingliste:$(date +%s) ghcr.io/${{ github.repository | toLowerCase() }}/fmms-shoppingliste:latest
 
     - name: Publish Docker image to GitHub Container Registry
-      run: |
-        docker push ghcr.io/${{ github.repository }}/fmms-shoppingliste:latest
+      run: docker push ghcr.io/${{ github.repository | toLowerCase() }}/fmms-shoppingliste:latest
