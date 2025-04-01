@@ -1,18 +1,4 @@
 services:
-  web:
-    build: .
-    ports:
-      - 8081:8081
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./src
-          target: /app/src
-          ignore:
-            - node_modules/
-            - docs/
-        - action: rebuild
-          path: package.json
   couchdb:
     image: couchdb:3.4.2
     ports:

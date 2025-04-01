@@ -5,14 +5,15 @@
 describe('Shopping List Item Quantity & Unit Functionality', () => {
 
     beforeEach(() => {
+        // Starte die App
         cy.visit('/');
 
-        // create a new list for the test
+        // Erstelle neue Liste für isolierten Test
         cy.get('button').contains('add').click();
         cy.get('input[placeholder="e.g. Food"]').type('Testliste');
         cy.get('button').contains('check').click();
 
-        // open the created list
+        // Öffne die Testliste
         cy.get('.md-card').first().within(() => {
             cy.get('button').contains('chevron_right').click();
         });
@@ -24,18 +25,18 @@ describe('Shopping List Item Quantity & Unit Functionality', () => {
         cy.get('.input-wide input').type('Kartoffeln');
         cy.get('button').contains('add_shopping_cart').click();
 
-        // check if the input is displayed properly
+        // Überprüfung
         cy.get('.md-list-text-container').should('contain', '3 kg Kartoffeln');
     });
 
     it('should show quantity as 1 and unit as empty if not provided', () => {
-        // leave quantity and unit empty, just item name
+        // Leere quantity und unit, nur Titel angeben
         cy.get('.input-small input').eq(0).clear();
         cy.get('.input-small input').eq(1).clear();
         cy.get('.input-wide input').type('Bananen');
         cy.get('button').contains('add_shopping_cart').click();
 
-        // checking results
+        // Erwartet: "1  Bananen"
         cy.get('.md-list-text-container').should('contain', '1  Bananen');
     });
 
