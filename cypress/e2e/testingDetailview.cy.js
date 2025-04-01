@@ -27,29 +27,37 @@ describe("Testing Item Detail View functionality", () => {
     });
 
     it('Updates the item title in the detail view', () => {
-        // Open the detail view
+        // Open the detail view of the item
         cy.get('[data-testid="btn-item-detail-Eier"]').click();
 
-        // Update the item title
-        cy.get('[data-testid="input-item-title"]').clear().type('Milch');
+        // Update the item title and save changes
+        const updatedTitle = 'Milch';
+        cy.get('[data-testid="input-item-title"]').clear().type(updatedTitle);
         cy.get('[data-testid="btn-save-item-detail"]').click();
 
-        // Assert that the updated title is displayed in the list
-        cy.contains('Milch').should('exist');
-        cy.contains('Eier').should('not.exist');
+        // Verify the updated title is displayed in the list
+        cy.get('.md-list-text-container').should('contain.text', updatedTitle);
+
+        // Verify the old title no longer exists
+        cy.get('.md-list-text-container').should('not.contain.text', 'Eier');
     });
 
     it('Cancels changes in the detail view', () => {
-        // Open the detail view
+        // Open the detail view of the item
         cy.get('[data-testid="btn-item-detail-Eier"]').click();
 
         // Attempt to update the item title
-        cy.get('[data-testid="input-item-title"]').clear().type('Milch');
+        const updatedTitle = 'Milch';
+        cy.get('[data-testid="input-item-title"]').clear().type(updatedTitle);
+
+        // Cancel the changes
         cy.get('[data-testid="btn-cancel-item-detail"]').click();
 
-        // Assert that the original title is still displayed in the list
-        cy.contains('Eier').should('exist');
-        cy.contains('Milch').should('not.exist');
+        // Verify the original title is still displayed in the list
+        cy.get('.md-list-text-container').should('contain.text', 'Eier');
+
+        // Verify the updated title does not exist
+        cy.get('.md-list-text-container').should('not.contain.text', updatedTitle);
     });
 
     afterEach(() => {
