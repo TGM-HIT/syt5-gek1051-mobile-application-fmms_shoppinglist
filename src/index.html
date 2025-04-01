@@ -160,12 +160,7 @@
 
           <!-- checkbox against each item -->
           <div>
-            <md-checkbox 
-              v-model="item.checked" 
-              class="md-primary" 
-              v-on:change="onCheckListItem(item._id)" 
-              :data-testid="`checkbox-${item._id}`">
-            </md-checkbox>
+            <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)" :data-testid="`checkbox-${item._id}`" ></md-checkbox>
           </div>
 
           <!-- shopping list item title -->
@@ -174,10 +169,7 @@
           </div>
 
           <!-- shopping list item detail button -->
-          <md-button 
-            v-on:click="onShowItemDetail(item)" 
-            class="md-icon-button md-list-action" 
-            :data-testid="`info-button-${item.title}`">
+          <md-button v-on:click="onShowItemDetail(item)" class="md-icon-button md-list-action" :data-testid="`btn-item-detail-${item.title}`">
             <md-icon>info</md-icon>
           </md-button>
 
@@ -199,21 +191,21 @@
           <!-- item title -->
           <md-input-container class="item-detail-input">
             <label>Item Name</label>
-            <md-input v-model="selectedItem.title" data-testid="item-detail-title"></md-input>
+            <md-input v-model="selectedItem.title" data-testid="input-item-title"></md-input>
           </md-input-container>
 
           <!-- item checked status -->
           <div class="item-detail-checkbox">
-            <md-checkbox v-model="selectedItem.checked" class="md-primary" data-testid="item-detail-checked"></md-checkbox>
+            <md-checkbox v-model="selectedItem.checked" class="md-primary" data-testid="checkbox-item-checked"></md-checkbox>
             <label>Checked</label>
           </div>
         </md-card-content>
 
         <md-card-actions class="item-detail-actions">
           <!-- save button -->
-          <md-button class="save-button" v-on:click="onSaveItemDetail" data-testid="save-item-detail">Save</md-button>
+          <md-button class="save-button" v-on:click="onSaveItemDetail" data-testid="btn-save-item-detail">Save</md-button>
           <!-- cancel button -->
-          <md-button class="cancel-button" v-on:click="onBackToList" data-testid="cancel-item-detail">Cancel</md-button>
+          <md-button class="cancel-button" v-on:click="onBackToList" data-testid="btn-cancel-item-detail">Cancel</md-button>
         </md-card-actions>
       </md-card>
 
