@@ -181,10 +181,10 @@
               <span v-bind:class="{ cardchecked: item.checked }">{{ item.title }}</span>
             </div>
 
-            <!-- shopping list item detail button -->
-            <md-button v-on:click="onShowItemDetail(item)" class="md-icon-button md-list-action" :data-testid="`btn-item-detail-${item.title}`">
-              <md-icon>info</md-icon>
-            </md-button>
+              <!-- shopping list item detail button -->
+              <md-button v-on:click="onShowItemDetail(item)" class="md-icon-button md-list-action" :data-testid="`btn-item-detail-${item.title}`">
+                <md-icon>info</md-icon>
+              </md-button>
 
             <!-- shopping list item delete button -->
             <md-button v-on:click="onDeleteItem(item._id)" class="md-icon-button md-list-action">
