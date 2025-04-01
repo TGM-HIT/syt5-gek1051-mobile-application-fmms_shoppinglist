@@ -57,6 +57,7 @@ http://<HOST_IP>:8080
 - **User Stories**: [STORIES.md](docs/STORIES.md)
 - **Contributing Guide**: [CONTRIBUTION.md](docs/CONTRIBUTION.md)
 - **Technical Documentation**: [TechDoc.md](docs/TechDoc.md)
+- **Feature Documentation**: [FEATURES.md](docs/FEATURES.md)
 
 ## Credits
 

@@ -12,40 +12,42 @@ describe("Testing Item Detail View functionality", () => {
             cy.get('button').contains('chevron_right').click();
         });
 
-        // Add an item to the list
-        cy.get('[data-testid="input-new-item"]').type('Eier');
-        cy.get('[data-testid="btn-add-item"]').click();
+        // Add an item with quantity/unit
+        cy.get('input[placeholder="Quantity"]').type('6');
+        cy.get('input[placeholder="Unit"]').type('Stück');
+        cy.get('input[placeholder="Item name"]').type('Eier');
+        cy.get('button').contains('add_shopping_cart').click();
     });
 
     it('Opens the detail view of an item', () => {
-        // Open the detail view
         cy.get('[data-testid="btn-item-detail-Eier"]').click();
 
-        // Assert that the detail view is displayed
         cy.get('[data-testid="item-detail-card"]').should('be.visible');
         cy.get('[data-testid="input-item-title"]').should('have.value', 'Eier');
+
+        // optional: Menge und Einheit kontrollieren
+        cy.get('[data-testid="item-detail-card"]').within(() => {
+            cy.get('input').eq(1).should('have.value', '6');
+            cy.get('input').eq(2).should('have.value', 'Stück');
+        });
     });
 
-
     it('Cancels changes in the detail view', () => {
-        // Open the detail view of the item
         cy.get('[data-testid="btn-item-detail-Eier"]').click();
 
-        // Attempt to update the item title
+        // Update title to "Milch"
         const updatedTitle = 'Milch';
         cy.get('[data-testid="input-item-title"]').clear().type(updatedTitle);
 
-        // Cancel the changes
+        // Cancel changes
         cy.get('[data-testid="btn-cancel-item-detail"]').click();
 
-        // Verify the original title is still displayed in the list
-        cy.get('.md-list-text-container').should('contain.text', 'Eier');
-
-        // Verify the updated title does not exist
+        // Original Item sollte noch da sein (mit Menge + Einheit)
+        cy.get('.md-list-text-container').should('contain.text', '6 Stück Eier');
         cy.get('.md-list-text-container').should('not.contain.text', updatedTitle);
     });
 
     afterEach(() => {
-        cy.clearLocalStorage(); // Clear all local storage
+        cy.clearLocalStorage();
     });
 });

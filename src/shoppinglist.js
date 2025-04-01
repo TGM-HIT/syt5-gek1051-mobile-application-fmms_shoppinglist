@@ -34,6 +34,8 @@ const sampleListItem = {
   "type": "item",
   "version": 1,
   "title": "",
+  "itemQuantity": "",
+  "itemUnit": "",
   "checked": false,
   "createdAt": "",
   "updatedAt": ""
@@ -117,6 +119,8 @@ var app = new Vue({
     syncStatus: 'notsyncing',
     selectedItem: null, // Holds the currently selected item for detail view
     newItemTitle:'',
+    newItemQuantity:'',
+    newItemUnit:'',
     dictionary: [],
     filteredSuggestions: [],
   },
@@ -511,18 +515,28 @@ var app = new Vue({
      */
     onAddListItem: function() {
       if (!this.newItemTitle) return;
+
       var obj = JSON.parse(JSON.stringify(sampleListItem));
       obj._id = 'item:' + cuid();
       obj.title = this.newItemTitle;
+
+      // Wenn keine Quantity eingegeben wurde → default auf 1
+      obj.quantity = this.newItemQuantity ? this.newItemQuantity : 1;
+
+      // Unit darf leer bleiben
+      obj.unit = this.newItemUnit || '';
+
       obj.list = this.currentListId;
       obj.createdAt = new Date().toISOString();
       obj.updatedAt = new Date().toISOString();
-      db.put(obj).then( (data) => {
+
+      db.put(obj).then((data) => {
         obj._rev = data.rev;
         this.shoppingListItems.unshift(obj);
         this.newItemTitle = '';
+        this.newItemQuantity = '';
+        this.newItemUnit = '';
       });
-      this.filteredSuggestions = [];
     },
 
     /**
