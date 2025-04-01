@@ -39,9 +39,9 @@
         <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
 
         <!-- visualisation of sync status -->
-        <md-chip v-if="syncStatus == 'notsyncing' && mode != 'settings' && mode != 'about'">Not Syncing</md-chip>
-        <md-chip v-if="syncStatus == 'syncing' && mode != 'settings' && mode != 'about'" class="md-success">Syncing</md-chip>
-        <md-chip v-if="syncStatus == 'syncerror' && mode != 'settings' && mode != 'about'" class="md-warn">Sync Error</md-chip>
+        <md-chip v-if="syncStatus == 'notsyncing' && mode != 'settings' && mode != 'about'" data-testid="sync-status-not-syncing">Not Syncing</md-chip>
+        <md-chip v-if="syncStatus == 'syncing' && mode != 'settings' && mode != 'about'" class="md-success" data-testid="sync-status-syncing">Syncing</md-chip>
+        <md-chip v-if="syncStatus == 'syncerror' && mode != 'settings' && mode != 'about'" class="md-warn" data-testid="sync-status-sync-error">Sync Error</md-chip>
         
         <!-- save new shopping list button -->
         <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="singleList.title.length == 0">
