@@ -34,6 +34,7 @@ const sampleListItem = {
   "type": "item",
   "version": 1,
   "title": "",
+  "category": "", // Added category field
   "checked": false,
   "createdAt": "",
   "updatedAt": ""
@@ -119,6 +120,8 @@ var app = new Vue({
     newItemTitle:'',
     dictionary: [],
     filteredSuggestions: [],
+    categories: ["Fruits", "Vegetables", "Meat", "Dairy", "Other"], // Predefined categories
+    newItemCategory: "Other", // Ensure default category is set
   },
   // computed functions return data derived from the core data.
   // if the core data changes, then this function will be called too.
@@ -161,6 +164,21 @@ var app = new Vue({
      */
     sortedShoppingListItems: function() {
       return this.shoppingListItems.sort(newestFirst);
+    },
+    /**
+     * Groups shopping list items by category
+     * 
+     * @returns {Object}
+     */
+    groupedShoppingListItems: function() {
+      const grouped = {};
+      for (const item of this.shoppingListItems) {
+        if (!grouped[item.category]) {
+          grouped[item.category] = [];
+        }
+        grouped[item.category].push(item);
+      }
+      return grouped;
     }
   },
   /**
@@ -510,17 +528,19 @@ var app = new Vue({
      * to Vue's shoppingListItems array
      */
     onAddListItem: function() {
-      if (!this.newItemTitle) return;
+      if (!this.newItemTitle.trim()) return; // Ensure title is not empty
       var obj = JSON.parse(JSON.stringify(sampleListItem));
       obj._id = 'item:' + cuid();
-      obj.title = this.newItemTitle;
+      obj.title = this.newItemTitle.trim(); // Trim whitespace from title
+      obj.category = this.newItemCategory || "Other"; // Ensure category is set
       obj.list = this.currentListId;
       obj.createdAt = new Date().toISOString();
       obj.updatedAt = new Date().toISOString();
       db.put(obj).then( (data) => {
         obj._rev = data.rev;
         this.shoppingListItems.unshift(obj);
-        this.newItemTitle = '';
+        this.newItemTitle = ''; // Reset title
+        this.newItemCategory = "Other"; // Reset category to default
       });
       this.filteredSuggestions = [];
     },
