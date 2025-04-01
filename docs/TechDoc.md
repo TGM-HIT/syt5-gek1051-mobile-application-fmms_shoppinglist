@@ -20,7 +20,7 @@ Das Projekt basiert auf einem modernen, jedoch bewährten Technologie-Stack, der
 
 Nach sorgfältiger Evaluierung haben wir uns entschieden, den bestehenden Technologie-Stack beizubehalten, einschließlich des aktuellen Web-Frameworks VueJS 2. Ursprünglich wurde ein Upgrade auf VueJS 3 in Betracht gezogen, jedoch haben mehrere Faktoren zu der Entscheidung geführt, bei VueJS 2 zu bleiben:
 
-- Hoher Migrationsaufwand: Vue Material wird in VueJS 3 nicht mehr unterstützt, was eine aufwendige Anpassungen erforderlich machen würde.
+- Hoher Migrationsaufwand: Vue Material wird in VueJS 3 nicht mehr unterstützt, was eine aufwändige Anpassung erforderlich machen würde.
 - Fehlende Erfahrung: Im Team besteht begrenztes Wissen sowohl über VueJS 2 als auch über VueJS 3, was eine effiziente Migration erschwert.
 - Knapp bemessene Deadline: Die verfügbare Zeit reicht nicht aus, um die Migration sauber durchzuführen und gleichzeitig die Projektziele zu erreichen.
 
@@ -28,7 +28,7 @@ Aufgrund dieser Herausforderungen wird das Projekt weiterhin auf VueJS 2 basiere
 
 Als Frontend-UI-Framework setzen wir auf **Vue Material** [13], das auf Basis vorgefertigter Komponenten den Entwicklungsaufwand erheblich reduziert. Diese Komponenten bieten eine konsistente und anpassbare Benutzeroberfläche, die es uns ermöglicht, die Designprinzipien von Material Design effektiv umzusetzen. Durch die Nutzung dieser vorgefertigten Bausteine können wir schneller iterieren und uns auf die spezifischen Anforderungen der Anwendung konzentrieren, anstatt jedes UI-Element von Grund auf neu zu entwickeln.
 
-Es ist jedoch wichtig zu beachten, dass **Vue Material** mittlerweile als veraltet gilt und offiziell als **deprecated** markiert wurde. Der Hauptgrund dafür ist, dass Vue Material nur noch **Vue 2** unterstützt und nicht mit der neueren Version **Vue 3** kompatibel ist. Das bedeutet, dass künftige Updates, Verbesserungen und Sicherheitsfixes für Vue Material nicht mehr garantiert werden. Für zukünftige Projekte oder Weiterentwicklungen könnte es sinnvoll sein, auf modernere Alternativen umzusteigen, die die neueste Version von Vue unterstützen und aktiv gewartet werden.
+Es ist jedoch wichtig zu beachten, dass **Vue Material** mittlerweile als veraltet gilt und offiziell als **deprecated** markiert wurde. Der Hauptgrund dafür ist, dass Vue Material nur noch **Vue 2** unterstützt und nicht mit der neueren Version **Vue 3** kompatibel ist. Das bedeutet, dass künftige Updates, Verbesserungen und Sicherheitsfixes für Vue Material nicht mehr garantiert werden. Für zukünftige Projekte oder Weiterentwicklungen könnte es sinnvoll sein, auf moderne Alternativen umzusteigen, die die neueste Version von Vue unterstützen und aktiv gewartet werden.
 
 ## Dokumentation der verwendeten Schnittstellen
 
@@ -43,11 +43,11 @@ Laut dem `package.json` File, verwendet diese Applikation die Folgende Vue-Versi
     "vue-material": "^0.7.5",
 ```
 
-Das bedeutet, dass die zu verwendene API-Dokumentation die folgende ist: [16]
+Das bedeutet, dass die zu verwendende API-Dokumentation die folgende ist: [16]
 
 Ebenso wird, wie hier ersichtlich ist, das `Vue Material` Theme mit der Version `0.7.5` verwendet.
 
-Gehen wir aber genauer darauf an, welche spezifischen Funktionalitäten wir von VueJS zwei in unserem Projkt verwenden:
+Gehen wir aber genauer darauf an, welche spezifischen Funktionalitäten wir von VueJS zwei in unserem Projekt verwenden:
 
 [prompt-1]
 
@@ -67,14 +67,14 @@ var app = new Vue({
 
 *shoppinglist.js, Zeile 104*
 
-Hierbei ist besonders auf `el: '#app'` achtzugeben. Diese bindet die Vue-Instanz an das HTML-Element mit der ID `#app'. [17]
+Hierbei ist besonders auf `el: '#app'` acht zu geben. Diese bindet die Vue-Instanz an das HTML-Element mit der ID `#app'. [17]
 
 
 #### data - Reaktive Datenquelle
 
-Das `data`-Objekt enthält alle reaktiven Daten des UI-Zustands. Also alles, was man auf dem Bildschirm sieht (Inputs, Texte, Listen, etc.) basieren auf die Werte, die hier gespeichert sind.
+Das `data`-Objekt enthält alle reaktiven Daten des UI-Zustands. Also alles, was man auf dem Bildschirm sieht (Inputs, Texte, Listen, etc.) basiert auf die Werte, die hier gespeichert sind.
 
-Ebenso sind die Werte **reaktiv**, heißt: Wenn sich heir etwas ändert, passt sich die Benutzeroberfläche automatisch an. [18]
+Ebenso sind die Werte **reaktiv**, heißt: Wenn sich hier etwas ändert, passt sich die Benutzeroberfläche automatisch an. [18]
 
 ```javascript
 data: {
@@ -125,7 +125,7 @@ computed: {
 
 *shoppinglist.js, Zeile 125-146*
 
-Das Stichwort `computed`: automatisch berechnete Werte, die auf dem `data`-Zustand basieren. Es wird keine eigene Logik im Template geschrieben - Vue übernimmt hier das rechnen bzw. auswerten der Daten. [19]
+Das Stichwort `computed`: automatisch berechnete Werte, die auf dem `data`-Zustand basieren. Es wird keine eigene Logik im Template geschrieben - Vue übernimmt hier das Rechnen bzw. Auswerten der Daten. [19]
 
 Hierbei haben wir jetzt z.B. die `counts` Methode in der `computed` Section, welche den folgenden Sinn hat:
 - Alle Elemente in der jeweiligen Shoppingliste werden bei jeder Änderung gezählt. Dies inkludiert das Zählen von nicht-gecheckten, aber auch gecheckten Elementen.
@@ -151,7 +151,7 @@ methods: {
 Hier werden alle Funktionen definiert, die auf Benutzerinteraktion reagieren. Zum Beispiel, wenn jemand auf einen Button klickt, einen Eintrag erstellt oder löscht. [20]
 
 In diesem Fall haben wir zwei Methoden, welche den Modus wechseln. Damit werden dem Benutzer zum Beispiel
-bem auslösen der `onClickSettings` Methode die Einstellungen und beim auslösen der `onClickAbout` die About-Einträge angezeigt.
+beim Auslösen der `onClickSettings` Methode die Einstellungen und beim auslösen der `onClickAbout` die About-Einträge angezeigt.
 
 Beispiele aus der App:
 
@@ -228,7 +228,7 @@ Was passiert hier bei uns im Projekt? Folgendes:
 
 #### Vue Materials + Themes
 
-Wir erwenden hier im Projekt Vue Material [21], um ein einheitliches Theme zu gewährleisten.
+Wir verwenden hier im Projekt Vue Material [21], um ein einheitliches Theme zu gewährleisten.
 
 Dies wird im Code in der folgenden Sektion gemacht:
 
@@ -250,7 +250,7 @@ Dies ermöglicht die Verwendung von Material Design Komponenten wie z.B.:
 - `<md-icon>`
 - `<md-toolbar>`
 
-Für genuere Informationen zu den Material Design Komponenten siehe [23].
+Für genauere Informationen zu den Material Design Komponenten siehe [23].
 
 Die Theme-Konfiguration findet nun folgendermaßen statt:
 
@@ -265,28 +265,28 @@ Vue.material.registerTheme('default', {
 
 *shoppinglist.js, Zeile 92 - 97*
 
-Dadurch wird gewährleistet, dass wir ein einheitliches Styling verteilt über alle Komponenten haben.
+Dadurch wird gewährleistet, dass wir ein einheitliches Styling über alle Komponenten verteilt haben.
 
 - `primary` steuert z.B. die Farbe von Buttons
 
-Diese Werte sind beliebig Anpassbar.
+Diese Werte sind beliebig anpassbar.
 
-#### Vue Directives - Verbindng zwischen Vue (Daten) und UI
+#### Vue Directives - Verbindung zwischen Vue (Daten) und UI
 
 Im `index.html` Files werden, so wie es standardmäßig ist, sogenannte Vue Directives [24] verwendet.
 
-Diese ermöglichen es, in HTML Dokumenten eine Verbindung zwischen der UI (also den HTMl Elementen) und der Datenverwaltung (also der Vue Applikation).
+Diese ermöglichen es, in HTML Dokumenten eine Verbindung zwischen der UI (also den HTML Elementen) und der Datenverwaltung (also der Vue Applikation) herzustellen.
 
 Im `index.html` File werden zum Großteil die folgenden Directives verwendet:
 
 
-| Directive    | Funktion für App                                                                                                              |
-|--------------|-------------------------------------------------------------------------------------------------------------------------------|
-| `v-model`    | two-way Bindung zwischen Vue Daten (`data`) und dem Eingabefeld                                                               |
-| `v-if`       | Ermöglicht if-Verzweigungen anhand Zustände der Daten (also kann z.B. auch ganze Bereiche ausblenden)                         |
-| `v-for`      | Ermöglicht for-loops (kann also z.B. wiederholt alle Elemente anzeigen, alle Items)                                           |
-| `v-on:click` | Event-Listener für Clicks                                                                                                     |
-| `v-bind`     | Bindet dynamische Werte an Attribte                                                                                           |
+| Directive    | Funktion für App                                                                                                                |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------|
+| `v-model`    | two-way Bindung zwischen Vue Daten (`data`) und dem Eingabefeld                                                                 |
+| `v-if`       | Ermöglicht if-Verzweigungen anhand Zustände der Daten (also kann z.B. auch ganze Bereiche ausblenden)                           |
+| `v-for`      | Ermöglicht for-loops (kann also z.B. wiederholt alle Elemente anzeigen, alle Items)                                             |
+| `v-on:click` | Event-Listener für Clicks                                                                                                       |
+| `v-bind`     | Bindet dynamische Werte an Attribute                                                                                            |
 | `v-cloak`    | Verhindert "unformatierte Anzeige" bevor Vue geladen ist (zeigt den Content also immer nur erst dann her, wenn Vue geladen ist) | |
 
 Im Code sieht das zum Beispiel folgendermaßen aus:
@@ -309,13 +309,13 @@ Im Code sieht das zum Beispiel folgendermaßen aus:
 *index.html, Zeile 158 - 169*
 
 Hier werden Directives verwendet:
-  - `v-for & v-if`: Hir werden alle sortieren Items aus der ShoppingListe angezeigt, solange sie aus der `currentList` stammen
+  - `v-for & v-if`: Hier werden alle sortieren Items aus der ShoppingListe angezeigt, solange sie aus der `currentList` stammen
   - Danach wird die Verbindung zum `checked` (also "eingekauft") Attribut mittels `v-model` geact, wobei dann direkt auch ein `v-on:change` Eventlistener angewendet wird
-  - Danach wird mitels `v-bind` der korrekte Checkbox-Status und Item Name angezeigt
+  - Danach wird mittels `v-bind` der korrekte Checkbox-Status und Item Name angezeigt
 
 ### OpenStreetMap API (Nominatim)
 
-Das Projekt verwendet ebenso die OpenStreetMap API namnes Nominatim. [25]
+Das Projekt verwendet ebenso die OpenStreetMap API namens Nominatim. [25]
 
 Diese wird folgenderweise im Projekt eingebunden:
 
@@ -384,7 +384,7 @@ Wir verwenden die PouchDB Sync Funktionalität:
 
 *shoppinglist.js, Zeile 250 - 267*
 
-Hierbei wird die lokale Datenbank (`PouchDB`) mit einer externen Datenbank synchronisiert. Dies ist in unserem Use-Case z.B. die Synhronisierung
+Hierbei wird die lokale Datenbank (`PouchDB`) mit einer externen Datenbank synchronisiert. Dies ist in unserem Use-Case z.B. die Synchronisierung
 der Shoppingliste über mehrere Clients. Hierfür kann man einen PouchDB server angeben, welcher sichergeht, dass alle lokalen 
 Instanzen auf dem gleichen Stand sind. [14]
 
@@ -398,7 +398,7 @@ Dies bedeutet, dass die Applikation auch ohne Internet funktioniert. Sie speiche
 
 Im Bereich der Datenbanken bleiben wir bei der bewährten Kombination aus **PouchDB** und **CouchDB**.
 Diese Technologien haben sich als stabil und gut geeignet für die Anforderungen des Projekts erwiesen,
-insbesondere durch ihre Fähigkeit zur Offline-Synchronisation und flexiblen Datenverwaltung.
+insbesondere durch ihre Fähigkeit zur Offline-Synchronisation und flexibler Datenverwaltung.
 Da sie weiterhin den Bedürfnissen des Systems entsprechen, sehen wir derzeit keinen Anlass, hier Änderungen vorzunehmen. *[6], [7]*
 
 ### Datenbankeinträge
@@ -443,7 +443,7 @@ Wenn eine Liste oder ein Item lokal gelöscht wird, erfolgt dies direkt in der e
 
 PouchDB bietet hierfür eine elegante Lösung, indem es eine bidirektionale Synchronisation mit CouchDB ermöglicht [14]. Diese Dokumentation beschreibt das Konzept der Synchronisation und zeigt, wie Änderungen effizient verwaltet werden können.
 
-Die Synchronisation zwischen PouchDB und CouchDB erfolgt über die `sync`-Methode, die in Echtzeit (`live: true`) oder als einmalige Abgleichsoperation genutzt werden kann. Dabei wird zwischen eingehenden (`pull`) und ausgehenden (`push`) Änderungen unterschieden.
+Die Synchronisation zwischen PouchDB und CouchDB erfolgt über die `sync`-Methode, die in Echtzeit (`live: true`) oder als einmalige Abgleichs Operation genutzt werden kann. Dabei wird zwischen eingehenden (`pull`) und ausgehenden (`push`) Änderungen unterschieden.
 
 #### Initialisierung der Synchronisation
 
@@ -505,11 +505,132 @@ Der Code überprüft, ob das empfangene Dokument zur Kategorie der Einkaufsliste
 
 Im nächsten Schritt wird geprüft, ob das Dokument bereits in der lokalen Datenbank existiert. Falls es bereits vorhanden ist und als gelöscht (`_deleted`) markiert wurde, wird es aus der Liste entfernt. Falls es aktualisiert wurde, wird das `_revisions`-Feld entfernt, um unnötige Daten zu vermeiden, und die bestehende Version mit `Vue.set` aktualisiert. 
 
-Sollte das Dokument neu sein und nicht gelöscht, wird es am Anfang der Liste eingefügt. Dieser Mechanismus stellt sicher, dass neu synchronisierte Daten unmittelbar in der Benutzeroberfläche erscheinen und veraltete Einträge entfernt werden.
+Sollte das Dokument neu sein und nicht gelöscht werden, wird es am Anfang der Liste eingefügt. Dieser Mechanismus stellt sicher, dass neu synchronisierte Daten unmittelbar in der Benutzeroberfläche erscheinen und veraltete Einträge entfernt werden.
 
 #### Konfliktlösung
 
-TODO: Ausarbeiten und Schreiben von Kofliktlösungsansatz, verweise auf [8]
+[prompt-2]
+
+Bei der Synchronisation zwischen mehreren Datenbanken - insbesondere bei Offline-First-Ansätzen, wie wir es hier haben, mit PouchDB  kann es zu Konflikten kommen. [8]
+
+Diese entstehen immer dann, wenn zwei Clients dieselbe Ressource (z.B. in unserem Fall eine Einkaufsliste oder ein Item) unabhängig voneinander verändern, während sie offline sind oder bevor die Änderungen synchronisiert wurden.
+
+PouchDB unterscheidet hierbei in zwei Arten von Konflikten: immediate und eventual Konflikte.
+
+##### Immediate Conflicts (409 Conflict)
+
+Sofortiger Konflikt tritt z.B. dann auf, wenn versucht wird, ein Dokument zu speichern (z.B. `db.put()`), das seit dem letzten Laden vom Server verändert wurde.
+
+PouchDB bezeichnet diesen Fehler als `409 conflict`:
+
+```javascript
+const myDoc = {
+  _id: 'someid',
+  _rev: '1-somerev'
+};
+db.put(myDoc).then(function () {
+  // success
+}).catch(function (err) {
+  if (err.name === 'conflict') {
+    // conflict!
+  } else {
+    // some other error
+  }
+});
+
+```
+
+Um das hier zu verhindern, kann man eine sogenannte Upsert-Strategie verwenden (-> `update or insert`). Dazu prüft man vor dem Speichern, ob der aktuelle Datensatz in der DB existiert, lädt die aktuelle Revision und speichert dann erst die Änderung - wie in der Methode `saveLocalDoc()` in *shoppinglist.js* umgesetzt:
+
+```javascript
+    /**
+     * Saves 'doc' to PouchDB. It first checks whether that doc
+     * exists in the database. If it does, it overwrites it - if
+     * it doesn't, it just writes it. 
+     * @param {Object} doc
+     * @returns {Promise}
+     */
+    saveLocalDoc: function(doc) {
+      return db.get(doc._id).then((data) => {
+        doc._rev = data._rev;
+        return db.put(doc);
+      }).catch((e) => {
+        return db.put(doc);
+      });
+    }
+```
+
+Oder, wie es PouchDB direkt empfiehlt zu machen:
+
+```javascript
+function myDeltaFunction(doc) {
+  doc.counter = doc.counter || 0;
+  doc.counter++;
+  return doc;
+}
+
+db.upsert('my_id', myDeltaFunction).then(function () {
+  // success!
+}).catch(function (err) {
+  // error (not a 404 or 409)
+});
+
+```
+
+*shoppinglist.js, Zeile 226 - 240*
+
+##### Eventual Conflicts
+
+Eventual Conflicts entstehen meist durch gleichzeitige Änderungen an derselben Ressource auf verschiedene Clients.
+
+Wenn beide Clients offline waren und später ihre Änderungen synchronisieren, entstehen zwei konkurrierende Versionen.
+
+CouchDB/PouchDB wählt dann automatisch eine "Gewinner-Version" nach einem festgelegten Algorithmus, verwirft die anderen aber nicht. Hierbei wird eine conflict history erhalten, auf die man auch im Nachhinein zurückgreifen kann.
+
+Mit dem Parameter `{ conflicts: true }` beim Laden eines Dokuments kann man solche Fälle erkennen:
+
+```javascript
+db.get('list:abc123', { conflicts: true }).then((doc) => {
+  if (doc._conflicts) {
+    console.log('Konflikte gefunden:', doc._conflicts);
+  }
+});
+```
+
+Das bedeutet, dass Konflikte in dem `_conflicts` Attribut gespeichert werden.
+
+Beispiel Objekt:
+
+```json
+{
+  "_id": "list:abc123",
+  "_rev": "2-a",
+  "_conflicts": ["2-b"]
+}
+```
+
+Hier existieren zwei konkurrierende Revisions Zweige auf gleicher Ebene (`2-a` und `2-b`), wobei einer als Gewinner markiert wurde.
+
+(wobei das `_rev` Attribut meistens eher wie ein `2-c1592ce7b31cc26e91d2f2029c57e621` aussieht)
+
+##### Auflösen von Konflikten
+
+Es gibt hierbei verschiedene Strategien zur Konfliktlösung:
+
+- **Manuelle Entscheidung des Users**: Wenn zwei Versionen in einem UI angezeigt werden und der Benutzer entscheidet.
+- **Automatisch durch Regel**: z.B.: "Last Write Wins", "First Write Wins" oder benutzerdefinierte Merges.
+- **Accountants don't use erasers**: Hierbei steht im Fokus, dass keine Objekte gelöscht werden. Dabei werden einfach immer wieder neue Objekte erstellt. Dadurch kann man keine existierenden Dokumente updaten oder löschen, aber auch nie einen Konflikt bekommen.
+
+```javascript
+{_id: new Date().toJSON(), change: 100} // balance increased by $100
+{_id: new Date().toJSON(), change: -50} // balance decreased by $50
+{_id: new Date().toJSON(), change: 200} // balance increased by $200
+
+```
+
+Hier werden einfach bei jeder Operation neue Objekte erstellt, anstatt auf die alten zuzugreifen.
+
+Diese Methode geschieht (wie der Name bereits verrät) nach dem Maxim "Accountans don't use erasers". [26]
 
 ## Deployment
 
@@ -532,7 +653,7 @@ Eine robuste Teststrategie ist entscheidend für die Wartbarkeit und Zuverlässi
 
 ### Bedeutung des E2E-Testens
 
-E2E-Tests sind essenziell, um sicherzustellen, dass die gesamte Anwendung unter realistischen Bedingungen funktioniert. Diese Tests decken den vollständigen Benutzerfluss ab und helfen dabei, Integrationsprobleme zwischen verschiedenen Komponenten frühzeitig zu erkennen. Durch die Simulation echter Nutzerinteraktionen können kritische Fehler identifiziert werden, bevor sie in Produktion gehen.
+E2E-Tests sind essentiell, um sicherzustellen, dass die gesamte Anwendung unter realistischen Bedingungen funktioniert. Diese Tests decken den vollständigen Benutzerfluss ab und helfen dabei, Integrationsprobleme zwischen verschiedenen Komponenten frühzeitig zu erkennen. Durch die Simulation echter Nutzerinteraktionen können kritische Fehler identifiziert werden, bevor sie in Produktion gehen.
 
 ### Teststrategie
 
@@ -602,13 +723,36 @@ Weitere Informationen zur Implementierung von Tests befinden sich in **[CONTRIBU
  
 - [25]: https://nominatim.openstreetmap.org/ui/search.html; 01.04.2025
 
+- [26]: https://queue.acm.org/detail.cfm?id=2884038; 01.04.2025
+
 ## Prompts
 
 - [prompt-1]: 
   
   ```
   VueJS, Technical documentation. Wir haben das folgende Projekt, welches VueJS 2.7.16 verwendet: [insert code of index.html and shoppinglist.js].
-  Nun möchte ich in markdown eine Dokumentation der verwendeten Schnittstellen machen. Also der Vue-API-Schnittstellen, die das Projekt verwendet
+  Nun möchte ich in Markdown eine Dokumentation der verwendeten Schnittstellen machen. Also der Vue-API-Schnittstellen, die das Projekt verwendet
+  ```
+
+  - 01.04.2025;ChatGPT by OpenAI; mfellner@tutanota.com
+
+
+- [prompt-2]:
+
+  ``` 
+  Folgendes TechDoc:
+  [insert complete TechDoc]
+
+  Ich möchte jetzt folgenden Punkt füllen:
+  "#### Konfliktlösung
+
+    TODO: Ausarbeiten und Schreiben von Kofliktlösungsansatz, verweise auf [8]"
+
+  Verfasse mir diesen Teil. Verwende und verweise dabei auf https://pouchdb.com/guides/conflicts.html (für text der website sehe unten)
+
+  [insert code of shoppinglist.js]
+
+  [insert text of website [8]]
   ```
 
   - 01.04.2025;ChatGPT by OpenAI; mfellner@tutanota.com
