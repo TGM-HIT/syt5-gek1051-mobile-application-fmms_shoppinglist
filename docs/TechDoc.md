@@ -423,15 +423,17 @@ Da sie weiterhin den Bedürfnissen des Systems entsprechen, sehen wir derzeit ke
 
 **ShoppingList-Item - Eintrag in der ShoppingListe**
 
-| Feld        | Typ       | Beschreibung                                                                       |
-| ----------- | --------- | ---------------------------------------------------------------------------------- |
-| `_id`       | `String`  | Eindeutige Identifikationsnummer des Listenelements (z. B. UUID oder MongoDB-ID).  |
-| `type`      | `String`  | Typ des Objekts, festgelegt auf `"item"`, um es als Listenelement zu kennzeichnen. |
-| `version`   | `Number`  | Versionsnummer des Elements (z. B. für Schema-Updates, hier fest `1`).             |
-| `title`     | `String`  | Name oder Beschreibung des Elements (z. B. "Milch" oder "Brot").                   |
-| `checked`   | `Boolean` | Gibt an, ob das Element als erledigt markiert ist (Standard: `false`).             |
-| `createdAt` | `String`  | Zeitstempel der Erstellung (z. B. ISO 8601: `"2025-03-26T12:00:00Z"`).             |
-| `updatedAt` | `String`  | Zeitstempel der letzten Aktualisierung (z. B. ISO 8601).                           |
+| Feld        | Typ      | Beschreibung                                                                                                                     |
+|-------------|----------|----------------------------------------------------------------------------------------------------------------------------------|
+| `_id`       | `String` | Eindeutige Identifikationsnummer des Listenelements (z. B. UUID oder MongoDB-ID).                                                |
+| `type`      | `String` | Typ des Objekts, festgelegt auf `"item"`, um es als Listenelement zu kennzeichnen.                                               |
+| `version`   | `Number` | Versionsnummer des Elements (z. B. für Schema-Updates, hier fest `1`).                                                           |
+| `title`     | `String` | Name oder Beschreibung des Elements (z. B. "Milch" oder "Brot").                                                                 |
+| `checked`   | `Boolean` | Gibt an, ob das Element als erledigt markiert ist (Standard: `false`).                                                           |
+| `quantity`  | `String` | Gibt an, wie viel der Benutzer von dem jeweiligen Produkt kaufen muss (Standard: `1`, optional)                                  |
+| `unit`       | `String`  | Gibt an, in welcher Einheit der Benutzer den jeweiligen Artikel kaufen möchte (z.B. `kg`, `g`, etc.), optional (Standard: empty) |
+| `createdAt` | `String` | Zeitstempel der Erstellung (z. B. ISO 8601: `"2025-03-26T12:00:00Z"`).                                                           |
+| `updatedAt` | `String` | Zeitstempel der letzten Aktualisierung (z. B. ISO 8601).                                                                         |
 
 #### Einträge erstellen & löschen
 
