@@ -29,11 +29,11 @@
   "homepage": "https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb#readme",
   "dependencies": {
     "cuid": "^3.0.0",
-    "vue": "^2.7.16",
-    "vue-material": "^0.7.5",
+    "events": "^3.3.0",
     "pouchdb": "^9.0.0",
     "pouchdb-find": "^9.0.0",
-    "events": "^3.3.0"
+    "vue": "^2.7.16",
+    "vue-material": "^0.7.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue2": "^2.3.3",
