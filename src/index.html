@@ -178,7 +178,7 @@
         </md-list-item>
 
         <!-- shopping list items -->
-        <md-list-item class="listitem" v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
+        <md-list-item v-for="item in sortedShoppingListItems" :key="item._id" v-if="item.list == currentListId">
 
           <!-- checkbox against each item -->
           <div>
