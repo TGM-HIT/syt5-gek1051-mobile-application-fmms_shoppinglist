@@ -351,13 +351,6 @@ var app = new Vue({
       });;
     },
 
-    
-    /**
-     */
-    suggestWord: function() {
-        console.log('suggestWord');
-    },
-
     /**
      * Given a list of docs and an id, find the doc in the list that has
      * an '_id' (key) that matches the incoming id. Returns an object 
@@ -543,8 +536,6 @@ var app = new Vue({
           console.error("Fehler bei der Anmeldung:", error);
           this.loginStatus = 'loginerror';
       });
-      return
-        this.loginStatus = 'loggedin';
     },
 
     /**
