@@ -149,6 +149,18 @@
                 <label>Item Name</label>
                 <md-input v-model="newItemTitle" placeholder="e.g. eggs" @input="filterSuggestions" @keyup.enter.native="onAddListItem" data-testid="input-new-item"></md-input>
               </md-input-container>
+              
+                <!-- Item Quantity -->
+                <md-input-container class="item-detail-input">
+                    <label>Item Quantity</label>
+                    <md-input v-model="selectedItem.quantity"></md-input>
+                </md-input-container>
+                <!-- Item Unit -->
+                <md-input-container class="item-detail-input">
+                    <label>Item Unit</label>
+                    <md-input v-model="selectedItem.unit"></md-input>
+                </md-input-container>
+
               <div v-if="filteredSuggestions.length" class="suggestions">
                 <div v-for="(word, index) in filteredSuggestions" :key="word" class="suggestion-word" @click="selectSuggestion(word)"> {{ word }} </div>
               </div>
@@ -178,7 +190,7 @@
 
             <!-- shopping list item title -->
             <div class="md-list-text-container">
-              <span v-bind:class="{ cardchecked: item.checked }">{{ item.title }}</span>
+              <span :class="{ cardchecked: item.checked }">{{ item.quantity }} {{ item.unit }} {{ item.title }}</span>
             </div>
 
               <!-- shopping list item detail button -->
@@ -206,6 +218,18 @@
           <md-input-container class="item-detail-input">
             <label>Item Name</label>
             <md-input v-model="selectedItem.title" data-testid="input-item-title"></md-input>
+          </md-input-container>
+
+          <!-- Item Quantity -->
+          <md-input-container class="item-detail-input">
+              <label>Item Quantity</label>
+              <md-input v-model="selectedItem.quantity"></md-input>
+          </md-input-container>
+          
+          <!-- Item Unit -->
+          <md-input-container class="item-detail-input">
+              <label>Item Unit</label>
+              <md-input v-model="selectedItem.unit"></md-input>
           </md-input-container>
 
           <!-- item category -->
