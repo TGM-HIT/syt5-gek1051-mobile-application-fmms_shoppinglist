@@ -66,7 +66,30 @@
             <label>List name</label>
             <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
           </md-input-container>   
-          
+
+          <!-- add user access -->
+          <div style="flex: 1">
+            <md-input-container>
+              <md-input v-model="newItemTitle" :key="usernames" placeholder="New user" @input="filterSuggestions(usernames)" @keyup.enter.native="addUserAccess" data-testid="input-new-item"></md-input>
+            </md-input-container>
+            <div v-if="filteredSuggestions.length" class="suggestions">
+              <div v-for="(word, index) in filteredSuggestions" :key="word" class="suggestion-word" @click="selectSuggestion(word)"> {{ word }} </div>
+            </div>
+          </div>
+
+          <div v-if="filteredSuggestions.length" class="suggestions">
+            <div v-for="(word, index) in filteredSuggestions" :key="word" class="suggestion-word" @click="selectSuggestion(word)"> {{ word }} </div>
+          </div>
+
+          <div v-if="singleList.userAccess.length">
+            <div v-for="user in singleList.userAccess" :key="user">
+              <md-chip style="padding: 0; float:left; margin: 5px;">
+                <div style="margin: 7px 12px; float: left;">{{ user }}</div>
+                <i aria-hidden="true" class="md-icon md-theme-default material-icons" @click="removeUserAccess(user)" style="margin:4px; padding:0;">cancel</i>
+              </md-chip>
+            </div>
+          </div>
+
           <!-- shopping place name -->
           <md-input-container>
             <label>Place name</label>
@@ -141,7 +164,7 @@
           <!-- shopping item title -->
             <div style="flex: 1">
                 <md-input-container>
-                    <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" @input="filterSuggestions" @keyup.enter.native="onAddListItem" data-testid="input-new-item"></md-input>
+                    <md-input v-model="newItemTitle" placeholder="New item e.g. eggs" :key="dictionary" @input="filterSuggestions(dictionary)" @keyup.enter.native="onAddListItem" data-testid="input-new-item"></md-input>
                 </md-input-container>
                 <div v-if="filteredSuggestions.length" class="suggestions">
                     <div v-for="(word, index) in filteredSuggestions" :key="word" class="suggestion-word" @click="selectSuggestion(word)"> {{ word }} </div>

@@ -108,6 +108,7 @@ var app = new Vue({
     mode: 'showlist',
     pagetitle: 'Shopping Lists',
     shoppingLists: [],
+    allShoppingLists: [],
     shoppingListItems: [],
     singleList: null,
     currentListId: null,
@@ -122,6 +123,7 @@ var app = new Vue({
     admin_password: '',
     username: '',
     password: '',
+    usernames: [],
     loginStatus: 'notloggedin'
   },
   // computed functions return data derived from the core data.
@@ -186,6 +188,7 @@ var app = new Vue({
 
       // write the data to the Vue model, and from there the web page
       app.shoppingLists = data.docs;
+      app.allShoppingLists = data.docs;
 
       // get all of the shopping list items
       var q = {
@@ -206,6 +209,7 @@ var app = new Vue({
       this.admin_username = data.admin_username;
       this.admin_password = data.admin_password;
       this.startSync();
+      this.loadUsers();
     }).catch((e) => {})
 
     this.loadDictionary();
@@ -262,7 +266,7 @@ var app = new Vue({
      * so that the Vue.js model is kept in sync.
      */
     startSync: function() {
-      temp = this.syncURL.replace("http://", '');
+      var temp = this.syncURL.replace("http://", '');
       this.syncURLadmin  = 'http://' + this.admin_username + ':' + this.admin_password + '@' + temp;
 
       this.syncStatus = 'notsyncing';
@@ -325,9 +329,26 @@ var app = new Vue({
           this.syncStatus = 'syncerror';
         }
       });;
-      this.db_usr = new PouchDB("http://" + this.admin_username + ':' + this.admin_password + '@' + temp.split("/")[0] + "/_users", {
-        skip_setup: true // `_users` ist eine spezielle System-Datenbank
-      });
+      if (this.sync_usr_admin) {
+        this.sync_usr_admin.close();
+        this.sync_usr_admin = null;
+      }
+      this.db_usr = new PouchDB("users");
+      this.sync_usr_admin = this.db_usr.sync("http://" + this.admin_username + ':' + this.admin_password + '@' + temp.split("/")[0] + "/_users", {
+        live: true,
+        retry: true,
+        // skip_setup: true // `_users` ist eine spezielle System-Datenbank
+      }).on('change', (info) => {
+        console.log("Benutzerdatenbank Änderung:", info);
+      }).on('error', (e) => {
+        console.error("Fehler beim Erstellen der Benutzerdatenbank:", e);
+      }).on('denied', (e) => {
+        console.error("db_user: denied", e);
+      }).on('paused', (e) => {
+        if (e) {
+          console.error("db_user: paused", e);
+        }
+      });;
     },
 
     
@@ -411,6 +432,7 @@ var app = new Vue({
       this.places = [];
       this.selectedPlace = null;
       this.mode='addlist';
+      this.singleList.userAccess = [];
     },
 
     /**
@@ -422,6 +444,11 @@ var app = new Vue({
 
       // add timestamps
       this.singleList.updatedAt = new Date().toISOString();
+
+      if (this.loginStatus == 'loggedin' && this.username && !this.singleList.userAccess.includes(this.username)) {
+        this.singleList.userAccess.push(this.username);
+      }
+      console.log(this.singleList.userAccess);
 
       // add to on-screen list, if it's not there already
       if (typeof this.singleList._rev === 'undefined') {
@@ -438,12 +465,85 @@ var app = new Vue({
       });
     },
 
+    loadUsers: function() {
+      this.db_usr.allDocs({
+        include_docs: true
+      }).then((result) => {
+        this.usernames = [];
+        for (let row of result.rows) {
+          if (row.id.startsWith("org.couchdb.user:")) {
+            var name = row.id.replace("org.couchdb.user:", "");
+            this.usernames.push(name);
+          }
+        }
+        console.log("usernames:", this.usernames);
+      }).catch((error) => {
+        console.error("Fehler beim Laden der Benutzer:", error);
+      });
+    },
+
+    addUserAccess: function() {
+      console.log(this.newItemTitle)
+      if (!this.usernames.includes(this.newItemTitle)) {
+        console.error("Benutzer existiert nicht!");
+        return;
+      }
+      if (this.singleList.userAccess.includes(this.newItemTitle)) {
+        console.error("Benutzer bereits hinzugefügt!");
+        return;
+      }
+      this.singleList.userAccess.push(String(this.newItemTitle));
+      console.log(this.singleList.userAccess)
+      this.newItemTitle = '';
+      this.filteredSuggestions = [];
+    },
+    
+    removeUserAccess: function(user) {
+      console.log(user);
+      this.singleList.userAccess = this.singleList.userAccess.filter(e => e !== user);
+      console.log(this.singleList.userAccess);
+    },
+
     /**
      * Called when the login button is pressed. The username and password
      * are saved in PouchDB and the sync process is restarted.
      */
     onClickLogin: function() {
-        console.log('onClickLogin');
+      var temp = this.syncURL.replace("http://", '');
+      temp = "http://" + temp.split("/")[0];
+      console.log(temp);
+      fetch(`${temp}/_session`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Basic ${btoa(`${this.username}:${this.password}`)}`
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.ok) {
+          console.log("Anmeldung erfolgreich:", data);
+          this.loginStatus = 'loggedin';
+          if (this.loginStatus == 'loggedin' && this.username) {
+            this.shoppingLists = [];
+            for (const s in this.allShoppingLists) {
+              var sl = this.allShoppingLists[s];
+              if (sl.userAccess.includes(this.username)) {
+                this.shoppingLists.push(sl);
+              }
+            }
+            console.log("shoppingLists", this.shoppingLists);
+          }
+        }
+        else{
+          console.error("Fehler bei der Anmeldung:", data);
+          this.loginStatus = 'loginerror';
+        }
+      })
+        .catch(error => {
+          console.error("Fehler bei der Anmeldung:", error);
+          this.loginStatus = 'loginerror';
+      });
+      return
         this.loginStatus = 'loggedin';
     },
 
@@ -550,13 +650,13 @@ var app = new Vue({
     /**
      * Filters the dictionary of words based on the current input
      */
-    filterSuggestions() {
+    filterSuggestions(dictionary) {
         const query = this.newItemTitle.toLowerCase();
         if (!query) {
             this.filteredSuggestions = [];
             return;
         }
-        this.filteredSuggestions = this.dictionary.filter(word => word.toLowerCase().startsWith(query));
+        this.filteredSuggestions = dictionary.filter(word => word.toLowerCase().startsWith(query));
         this.highlightedIndex = -1;
     },
     /**
