@@ -44,7 +44,7 @@
         <md-chip v-if="syncStatus == 'syncerror' && mode != 'settings' && mode != 'about'" class="md-warn" data-testid="sync-status-sync-error">Sync Error</md-chip>
         
         <!-- save new shopping list button -->
-        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="singleList.title.length == 0">
+        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="singleList.title.length == 0" data-testid="button-save-new-list">
           <md-icon>check</md-icon>
         </md-button>
 
