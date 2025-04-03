@@ -41,9 +41,75 @@ describe("Item can be checked", () => {
             });
     });
 
-    afterEach(() => {
-        // Browser-Storage (IndexedDB / LocalStorage) cleanup
-        indexedDB.deleteDatabase('shopping');
-        cy.clearLocalStorage();
+    it("uncheck a checked item", () => {
+        cy.get('input[placeholder="Quantity"]').type(itemQuantity);
+        cy.get('input[placeholder="Unit"]').type(itemUnit);
+        cy.get('input[placeholder="Item name"]').type(itemName);
+        cy.get('button').contains('add_shopping_cart').click();
+
+        cy.contains(`${itemQuantity} ${itemUnit} ${itemName}`)
+            .parents('.listitem')
+            .within(() => {
+                cy.get('input[type="checkbox"]').check({ force: true });
+                cy.get('input[type="checkbox"]').should('be.checked');
+
+                cy.get('input[type="checkbox"]').uncheck({ force: true });
+                cy.get('input[type="checkbox"]').should('not.be.checked');
+            });
     });
+
+    it("checked items persist after reload", () => {
+        cy.get('input[placeholder="Quantity"]').type(itemQuantity);
+        cy.get('input[placeholder="Unit"]').type(itemUnit);
+        cy.get('input[placeholder="Item name"]').type(itemName);
+        cy.get('button').contains('add_shopping_cart').click();
+
+        cy.contains(`${itemQuantity} ${itemUnit} ${itemName}`)
+            .parents('.listitem')
+            .within(() => {
+                cy.get('input[type="checkbox"]').check({ force: true });
+                cy.get('input[type="checkbox"]').should('be.checked');
+            });
+
+        cy.reload();
+
+        cy.contains(listName).parents('.md-card').within(() => {
+            cy.get('button').contains('chevron_right').click();
+        });
+
+        cy.contains(`${itemQuantity} ${itemUnit} ${itemName}`)
+            .parents('.listitem')
+            .within(() => {
+                cy.get('input[type="checkbox"]').should('be.checked');
+            });
+    });
+
+    it("add multiple items and check all", () => {
+        const items = [
+            { name: "Brot", quantity: "1", unit: "Laib" },
+            { name: "Milch", quantity: "2", unit: "Liter" },
+            { name: "Butter", quantity: "1", unit: "Packung" }
+        ];
+
+        items.forEach((item) => {
+            cy.get('input[placeholder="Quantity"]').type(item.quantity);
+            cy.get('input[placeholder="Unit"]').type(item.unit);
+            cy.get('input[placeholder="Item name"]').type(item.name);
+            cy.get('button').contains('add_shopping_cart').click();
+        });
+
+        items.forEach((item) => {
+            cy.contains(`${item.quantity} ${item.unit} ${item.name}`)
+                .parents('.listitem')
+                .within(() => {
+                    cy.get('input[type="checkbox"]').check({ force: true });
+                    cy.get('input[type="checkbox"]').should('be.checked');
+                });
+        });
+    });
+
+    afterEach(() => {
+        indexedDB.deleteDatabase('shopping');
+        cy.clearLocalStorage() // clear all local storage
+    })
 });
