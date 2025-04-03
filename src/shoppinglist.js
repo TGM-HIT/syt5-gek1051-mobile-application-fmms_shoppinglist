@@ -167,7 +167,12 @@ var app = new Vue({
      * @returns {Array}
      */
     sortedShoppingListItems: function() {
-      return this.shoppingListItems.sort(newestFirst);
+      return this.shoppingListItems.sort((a, b) => {
+        if (a.checked === b.checked) {
+          return a.title.localeCompare(b.title);
+        }
+        return a.checked ? 1 : -1;
+      });
     },
     /**
      * Groups shopping list items by category and sorts them within each group.
