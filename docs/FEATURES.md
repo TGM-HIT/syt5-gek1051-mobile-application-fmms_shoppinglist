@@ -568,3 +568,41 @@ The **Grouping Items by Category** feature organizes shopping list items into pr
      cy.get('.category-header').contains('Fruits').should('not.exist');
    });
    ```
+
+
+## Item Sorting
+
+### **What It Does**
+It returns a **sorted version** of the `shoppingListItems` array such that:
+1. **Unchecked items come first** (i.e. items the user hasn't bought yet).
+2. Within the unchecked and checked groups, items are sorted **alphabetically by title**.
+
+---
+
+### **How It Works (Line-by-Line)**
+
+```js
+sortedShoppingListItems: function() {
+  return this.shoppingListItems.sort((a, b) => {
+```
+- This uses JavaScript’s `.sort()` method to reorder the `shoppingListItems` array.
+- The sorting is done by comparing **two items** (`a` and `b`) at a time.
+
+---
+
+```js
+    if (a.checked === b.checked) {
+      return a.title.localeCompare(b.title);
+    }
+```
+- If both items have the **same checked status** (both checked or unchecked), it compares them **alphabetically by their `title`** using `localeCompare`.
+
+---
+
+```js
+    return a.checked ? 1 : -1;
+```
+- If the checked status **differs**, this line ensures:
+  - `a.checked === false` (unchecked) puts `a` **before** `b`.
+  - `a.checked === true` (checked) puts `a` **after** `b`.
+
