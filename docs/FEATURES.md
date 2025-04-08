@@ -419,3 +419,152 @@ startSync: function() {
 - **"Syncing"** when `syncStatus` is `syncing`
 - **"Sync Error"** when `syncStatus` is `syncerror`
 - Sync status chips should be hidden in **Settings** and **About** modes.
+
+## Feature Documentation: Grouping Items by Category
+
+### Description
+The **Grouping Items by Category** feature organizes shopping list items into predefined categories (e.g., Fruits, Vegetables, Dairy). Items without a category are grouped under "Other". This feature enhances the user experience by providing a structured view of the shopping list.
+
+---
+
+### Backend Implementation
+
+#### Methods in `shoppinglist.js`
+
+1. **`groupedShoppingListItems` (computed property)**  
+   - Groups shopping list items by their `category` attribute.  
+   - Items without a category are grouped under "Other".  
+   - Filters items to only include those belonging to the currently selected list.  
+
+   **Code Snippet**:
+   ```javascript
+   groupedShoppingListItems: function() {
+     return this.shoppingListItems.reduce((groups, item) => {
+       if (item.list === this.currentListId) {
+         const category = item.category || "Other";
+         if (!groups[category]) {
+           groups[category] = [];
+         }
+         groups[category].push(item);
+       }
+       return groups;
+     }, {});
+   }
+   ```
+
+2. **`onAddListItem()`**  
+   - Assigns a category to a new item based on the user's selection.  
+   - Defaults to "Other" if no category is selected.  
+
+   **Code Snippet**:
+   ```javascript
+   onAddListItem: function() {
+     var obj = JSON.parse(JSON.stringify(sampleListItem));
+     obj.category = this.newItemCategory || "Other";
+     // ...existing code...
+   }
+   ```
+
+3. **`onSaveItemDetail()`**  
+   - Updates the category of an item in the detail view.  
+   - Saves the updated item to the database and Vue model.  
+
+   **Code Snippet**:
+   ```javascript
+   onSaveItemDetail: function() {
+     this.selectedItem.updatedAt = new Date().toISOString();
+     db.put(this.selectedItem).then((data) => {
+       this.selectedItem._rev = data.rev;
+       const match = this.findDoc(this.shoppingListItems, this.selectedItem._id);
+       Vue.set(this.shoppingListItems, match.i, this.selectedItem);
+       this.onBackToList();
+     });
+   }
+   ```
+
+---
+
+### Frontend Implementation
+
+#### Grouped Items Display
+- **Location**: Inside the shopping list item editor (`mode == 'itemedit'`).  
+- **Purpose**: Displays items grouped by category with headers for each category.  
+- **Code Snippet**:
+  ```html
+  <!-- shopping list items grouped by category -->
+  <div v-for="(items, category) in groupedShoppingListItems" :key="category">
+    <h3 class="category-header">{{ category }}</h3>
+    <md-list-item class="listitem" v-for="item in items" :key="item._id">
+      <!-- ...existing code for item display... -->
+    </md-list-item>
+  </div>
+  ```
+
+#### Category Dropdown
+- **Location**: In both the item editor and detail view.  
+- **Purpose**: Allows users to assign a category to an item.  
+- **Code Snippet**:
+  ```html
+  <md-select v-model="newItemCategory" data-testid="select-item-category">
+    <md-option v-for="category in predefinedCategories" :key="category" :value="category" :data-testid="`option-category-${category}`">
+      {{ category }}
+    </md-option>
+  </md-select>
+  ```
+
+---
+
+### Test Cases
+
+#### Grouping Items by Category
+1. **Add items with different categories**  
+   - Input: Add items with categories "Fruits", "Dairy", and "Meat".  
+   - Expected: Items are grouped under their respective category headers.  
+
+   **Test Code**:
+   ```javascript
+   it('Groups items correctly by category', () => {
+     cy.get('.category-header').contains('Fruits').should('exist');
+     cy.get('.category-header').contains('Dairy').should('exist');
+     cy.get('.category-header').contains('Meat').should('exist');
+   });
+   ```
+
+2. **Add an item without a category**  
+   - Input: Add an item without selecting a category.  
+   - Expected: Item is grouped under the "Other" category.  
+
+   **Test Code**:
+   ```javascript
+   it('Displays "Other" for items without a category', () => {
+     cy.get('.category-header').contains('Other').should('exist');
+     cy.get('.category-header').contains('Other').nextUntil('.category-header').should('contain.text', 'Bread');
+   });
+   ```
+
+3. **Change an item's category**  
+   - Input: Change the category of an item from "Dairy" to "Beverages".  
+   - Expected: Item is moved to the "Beverages" group, and "Dairy" is removed if empty.  
+
+   **Test Code**:
+   ```javascript
+   it('Updates grouping when an item category is changed', () => {
+     cy.get('.category-header').contains('Beverages').nextUntil('.category-header').should('contain.text', 'Milk');
+     cy.get('body').then(($body) => {
+       if ($body.find('.category-header:contains("Dairy")').length > 0) {
+         cy.get('.category-header').contains('Dairy').nextUntil('.category-header').should('not.contain.text', 'Milk');
+       }
+     });
+   });
+   ```
+
+4. **Remove all items from a category**  
+   - Input: Delete all items in the "Fruits" category.  
+   - Expected: The "Fruits" category header is removed.  
+
+   **Test Code**:
+   ```javascript
+   it('Handles empty categories gracefully', () => {
+     cy.get('.category-header').contains('Fruits').should('not.exist');
+   });
+   ```
