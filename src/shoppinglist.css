@@ -210,3 +210,7 @@ body {
   padding-left: 10px;
 }
 
+.md-list-item {
+  z-index: auto !important;
+}
+
