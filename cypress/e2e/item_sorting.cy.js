@@ -96,10 +96,11 @@ describe("Testing Shopping List Item Sorting", () => {
 
     it("ensures sorting remains correct after deleting an item", () => {
         // Delete "Brot"
-        cy.contains("1 Laib Brot").parents('.listitem').within(() => {
-            cy.get('clear').click();
+        cy.contains("1 Laib Brot")
+            .parents('.listitem')
+            .within(() => {
+                cy.get('button').contains('cancel').click();
         });
-
         cy.get('.listitem').then((listItems) => {
             let updatedItems = items.filter(i => i.name !== "Brot");
             let sortedUnchecked = updatedItems.filter(i => !i.checked).map(i => i.name).sort();
