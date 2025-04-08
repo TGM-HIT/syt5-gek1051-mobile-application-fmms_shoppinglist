@@ -215,3 +215,15 @@ body {
   color: #fff; /* White text for selected option */
 }
 
+/* Category Header Styling */
+.category-header {
+  font-size: 1.4em; /* Slightly larger font size */
+  font-weight: bold;
+  margin-top: 30px; /* Increased top margin for better separation */
+  margin-bottom: 15px; /* Increased bottom margin */
+  padding: 10px 20px; /* Add padding for spacing */
+  border-bottom: 2px solid #e0e0e0; /* Light gray underline */
+  background-color: #f9f9f9; /* Light background for better visibility */
+  border-radius: 4px; /* Rounded corners */
+}
+
