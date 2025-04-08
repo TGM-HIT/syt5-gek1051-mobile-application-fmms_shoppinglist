@@ -199,3 +199,14 @@ body {
   background-color: #eee;
 }
 
+/* Category Header Styling */
+.category-header {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #e0e0e0; /* Light gray underline */
+  padding-bottom: 5px;
+  padding-left: 10px;
+}
+

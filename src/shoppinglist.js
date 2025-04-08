@@ -36,6 +36,7 @@ const sampleListItem = {
   "title": "",
   "itemQuantity": "",
   "itemUnit": "",
+  "category": "", // New field for category
   "checked": false,
   "createdAt": "",
   "updatedAt": ""
@@ -121,6 +122,8 @@ var app = new Vue({
     newItemTitle:'',
     newItemQuantity:'',
     newItemUnit:'',
+    newItemCategory: "Other", // Default category
+    predefinedCategories: ["Fruits", "Vegetables", "Meat", "Dairy", "Bakery", "Beverages", "Snacks", "Household", "Other"], // Predefined categories
     dictionary: [],
     filteredSuggestions: [],
   },
@@ -165,6 +168,23 @@ var app = new Vue({
      */
     sortedShoppingListItems: function() {
       return this.shoppingListItems.sort(newestFirst);
+    },
+    /**
+     * Groups shopping list items by category.
+     * 
+     * @returns {Object}
+     */
+    groupedShoppingListItems: function() {
+      return this.shoppingListItems.reduce((groups, item) => {
+        if (item.list === this.currentListId) {
+          const category = item.category || "Uncategorized";
+          if (!groups[category]) {
+            groups[category] = [];
+          }
+          groups[category].push(item);
+        }
+        return groups;
+      }, {});
     }
   },
   /**
@@ -520,11 +540,14 @@ var app = new Vue({
       obj._id = 'item:' + cuid();
       obj.title = this.newItemTitle;
 
-      // Wenn keine Quantity eingegeben wurde → default auf 1
+      // Default quantity to 1 if not provided
       obj.quantity = this.newItemQuantity ? this.newItemQuantity : 1;
 
-      // Unit darf leer bleiben
+      // Unit can remain empty
       obj.unit = this.newItemUnit || '';
+
+      // Assign category from dropdown
+      obj.category = this.newItemCategory;
 
       obj.list = this.currentListId;
       obj.createdAt = new Date().toISOString();
@@ -536,6 +559,7 @@ var app = new Vue({
         this.newItemTitle = '';
         this.newItemQuantity = '';
         this.newItemUnit = '';
+        this.newItemCategory = "Other"; // Reset category to default
       });
     },
 
