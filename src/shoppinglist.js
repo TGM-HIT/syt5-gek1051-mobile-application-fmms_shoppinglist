@@ -162,8 +162,7 @@ var app = new Vue({
     },
     /**
      * Calculates the shopping list items but sorted into
-     * date order - newest first
-     * 
+     * unchecked items first, after that in alphabetical order
      * @returns {Array}
      */
     sortedShoppingListItems: function() {
