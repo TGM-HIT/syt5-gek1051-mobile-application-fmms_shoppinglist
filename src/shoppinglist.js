@@ -170,14 +170,14 @@ var app = new Vue({
       return this.shoppingListItems.sort(newestFirst);
     },
     /**
-     * Groups shopping list items by category.
+     * Groups shopping list items by category and sorts them within each group.
      * 
      * @returns {Object}
      */
     groupedShoppingListItems: function() {
-      return this.shoppingListItems.reduce((groups, item) => {
+      return this.sortedShoppingListItems.reduce((groups, item) => {
         if (item.list === this.currentListId) {
-          const category = item.category || "Uncategorized";
+          const category = item.category || "Other";
           if (!groups[category]) {
             groups[category] = [];
           }
