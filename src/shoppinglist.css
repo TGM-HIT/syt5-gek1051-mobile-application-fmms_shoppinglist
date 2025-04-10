@@ -1,0 +1,229 @@
+body {
+  background-color: #9e9e9e
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.md-theme-default.md-card {
+  background-color: white !important;
+  margin:20px
+}
+
+.md-card-content {
+  border-top: 1px solid #ddd;
+}
+
+.md-card .md-card-content:last-child {
+  padding-bottom:0px !important;
+}
+
+.md-theme-default.md-card a {
+  color: #448aff !important;
+}
+
+.cardchecked {
+  text-decoration: line-through;
+  color: #ccc
+}
+
+.floatingbutton {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  z-index: 1000;
+}
+
+.main-toolbar{
+  position:sticky;
+  top:0px;
+  z-index:1000;
+}
+
+.itemedit {
+  background-color: white !important
+}
+
+/* Styling für die gesamte Karte */
+.item-detail-card {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+}
+
+/* Header-Styling */
+.item-detail-header {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #161414;
+  margin-bottom: 20px;
+}
+
+/* Input-Styling */
+.item-detail-input {
+  margin-bottom: 20px;
+}
+
+.item-detail-input label {
+  font-size: 1em;
+  color: #757575;
+}
+
+/* Checkbox-Styling */
+.item-detail-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.item-detail-checkbox label {
+  font-size: 1em;
+  color: #0e0c0c;
+}
+
+/* Actions-Styling */
+.item-detail-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.save-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #e53935;
+}
+
+.suggestions {
+  margin-top: -20px;
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  width: 200px;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Nice shadow */
+}
+
+.suggestion-word {
+  padding: 8px;
+  cursor: pointer; /* Makes cursor a pointer */
+}
+
+.suggestion-word:hover {
+  background: #e0e0e0; /* Highlight on hover */
+}
+
+.listitem {
+  z-index: 1;
+}
+
+.item-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.item-input-row .input-small {
+  flex: 0 0 80px;
+}
+
+.item-input-row .input-wide {
+  flex: 1;
+}
+
+.item-input-row .suggestions {
+  margin-top: -8px;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.item-input-row .suggestion-word {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.item-input-row .suggestion-word:hover {
+  background-color: #eee;
+}
+
+.suggestion-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.suggestion-word {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-word:hover {
+  background-color: #eee;
+}
+
+/* Dropdown option styling */
+.md-option {
+  color: #000; /* Black text for better contrast */
+  background-color: #fff; /* White background for options */
+}
+
+.md-option:hover {
+  background-color: #448aff; /* Blue background on hover */
+  color: #fff; /* White text on hover for contrast */
+}
+
+.md-option-selected {
+  background-color: #448aff; /* Blue background for selected option */
+  color: #fff; /* White text for selected option */
+}
+
+/* Category Header Styling */
+.category-header {
+  font-size: 1.4em; /* Slightly larger font size */
+  font-weight: bold;
+  margin-top: 30px; /* Increased top margin for better separation */
+  margin-bottom: 15px; /* Increased bottom margin */
+  padding: 10px 20px; /* Add padding for spacing */
+  border-bottom: 2px solid #e0e0e0; /* Light gray underline */
+  background-color: #f9f9f9; /* Light background for better visibility */
+  border-radius: 4px; /* Rounded corners */
+}
+
