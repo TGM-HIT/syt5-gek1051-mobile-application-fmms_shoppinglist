@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Shopping List</title>
+
+  <!-- mobile styling -->
+  <meta name="theme-color" content="#448AFF">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#448AFF">
+  <meta name="apple-mobile-web-app-title" content="Shopping List">
+
+  <!-- Material Design icons and fonts  -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- our styles -->
+  <link href="data:text/css;base64,Ym9keSB7CiAgYmFja2dyb3VuZC1jb2xvcjogIzllOWU5ZQp9Cgpbdi1jbG9ha10gewogIGRpc3BsYXk6IG5vbmU7Cn0KCi5tZC10aGVtZS1kZWZhdWx0Lm1kLWNhcmQgewogIGJhY2tncm91bmQtY29sb3I6IHdoaXRlICFpbXBvcnRhbnQ7CiAgbWFyZ2luOjIwcHgKfQoKLm1kLWNhcmQtY29udGVudCB7CiAgYm9yZGVyLXRvcDogMXB4IHNvbGlkICNkZGQ7Cn0KCi5tZC1jYXJkIC5tZC1jYXJkLWNvbnRlbnQ6bGFzdC1jaGlsZCB7CiAgcGFkZGluZy1ib3R0b206MHB4ICFpbXBvcnRhbnQ7Cn0KCi5tZC10aGVtZS1kZWZhdWx0Lm1kLWNhcmQgYSB7CiAgY29sb3I6ICM0NDhhZmYgIWltcG9ydGFudDsKfQoKLmNhcmRjaGVja2VkIHsKICB0ZXh0LWRlY29yYXRpb246IGxpbmUtdGhyb3VnaDsKICBjb2xvcjogI2NjYwp9CgouZmxvYXRpbmdidXR0b24gewogIHBvc2l0aW9uOiBmaXhlZDsKICBib3R0b206IDVweDsKICByaWdodDogNXB4OwogIHotaW5kZXg6IDEwMDA7Cn0KCi5tYWluLXRvb2xiYXJ7CiAgcG9zaXRpb246c3RpY2t5OwogIHRvcDowcHg7CiAgei1pbmRleDoxMDAwOwp9CgouaXRlbWVkaXQgewogIGJhY2tncm91bmQtY29sb3I6IHdoaXRlICFpbXBvcnRhbnQKfQoKLyogU3R5bGluZyBmw7xyIGRpZSBnZXNhbXRlIEthcnRlICovCi5pdGVtLWRldGFpbC1jYXJkIHsKICBtYXgtd2lkdGg6IDUwMHB4OwogIG1hcmdpbjogMjBweCBhdXRvOwogIHBhZGRpbmc6IDIwcHg7CiAgYm9yZGVyLXJhZGl1czogOHB4OwogIGJveC1zaGFkb3c6IDAgNHB4IDhweCByZ2JhKDAsIDAsIDAsIDAuMik7CiAgYmFja2dyb3VuZC1jb2xvcjogI2ZmZmZmZjsKfQoKLyogSGVhZGVyLVN0eWxpbmcgKi8KLml0ZW0tZGV0YWlsLWhlYWRlciB7CiAgdGV4dC1hbGlnbjogY2VudGVyOwogIGZvbnQtc2l6ZTogMS41ZW07CiAgZm9udC13ZWlnaHQ6IGJvbGQ7CiAgY29sb3I6ICMxNjE0MTQ7CiAgbWFyZ2luLWJvdHRvbTogMjBweDsKfQoKLyogSW5wdXQtU3R5bGluZyAqLwouaXRlbS1kZXRhaWwtaW5wdXQgewogIG1hcmdpbi1ib3R0b206IDIwcHg7Cn0KCi5pdGVtLWRldGFpbC1pbnB1dCBsYWJlbCB7CiAgZm9udC1zaXplOiAxZW07CiAgY29sb3I6ICM3NTc1NzU7Cn0KCi8qIENoZWNrYm94LVN0eWxpbmcgKi8KLml0ZW0tZGV0YWlsLWNoZWNrYm94IHsKICBkaXNwbGF5OiBmbGV4OwogIGFsaWduLWl0ZW1zOiBjZW50ZXI7CiAgZ2FwOiAxMHB4OwogIG1hcmdpbi1ib3R0b206IDIwcHg7Cn0KCi5pdGVtLWRldGFpbC1jaGVja2JveCBsYWJlbCB7CiAgZm9udC1zaXplOiAxZW07CiAgY29sb3I6ICMwZTBjMGM7Cn0KCi8qIEFjdGlvbnMtU3R5bGluZyAqLwouaXRlbS1kZXRhaWwtYWN0aW9ucyB7CiAgZGlzcGxheTogZmxleDsKICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47CiAgbWFyZ2luLXRvcDogMjBweDsKfQoKLnNhdmUtYnV0dG9uIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjNGNhZjUwOwogIGNvbG9yOiB3aGl0ZTsKfQoKLnNhdmUtYnV0dG9uOmhvdmVyIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjNDVhMDQ5Owp9CgouY2FuY2VsLWJ1dHRvbiB7CiAgYmFja2dyb3VuZC1jb2xvcjogI2Y0NDMzNjsKICBjb2xvcjogd2hpdGU7Cn0KCi5jYW5jZWwtYnV0dG9uOmhvdmVyIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjZTUzOTM1Owp9Cgouc3VnZ2VzdGlvbnMgewogIG1hcmdpbi10b3A6IC0yMHB4OwogIHBvc2l0aW9uOiBhYnNvbHV0ZTsKICBiYWNrZ3JvdW5kOiB3aGl0ZTsKICBib3JkZXI6IDFweCBzb2xpZCAjY2NjOwogIHdpZHRoOiAyMDBweDsKICBtYXgtaGVpZ2h0OiAxNTBweDsKICBvdmVyZmxvdy15OiBhdXRvOwogIHotaW5kZXg6IDEwMDA7CiAgYm94LXNoYWRvdzogMHB4IDRweCA2cHggcmdiYSgwLCAwLCAwLCAwLjEpOyAvKiBOaWNlIHNoYWRvdyAqLwp9Cgouc3VnZ2VzdGlvbi13b3JkIHsKICBwYWRkaW5nOiA4cHg7CiAgY3Vyc29yOiBwb2ludGVyOyAvKiBNYWtlcyBjdXJzb3IgYSBwb2ludGVyICovCn0KCi5zdWdnZXN0aW9uLXdvcmQ6aG92ZXIgewogIGJhY2tncm91bmQ6ICNlMGUwZTA7IC8qIEhpZ2hsaWdodCBvbiBob3ZlciAqLwp9CgoubGlzdGl0ZW0gewogIHotaW5kZXg6IDE7Cn0KCi5pdGVtLWlucHV0LXJvdyB7CiAgZGlzcGxheTogZmxleDsKICBmbGV4LXdyYXA6IHdyYXA7CiAgZ2FwOiA4cHg7CiAgYWxpZ24taXRlbXM6IGNlbnRlcjsKICBtYXJnaW46IDE2cHggMDsKfQoKLml0ZW0taW5wdXQtcm93IC5pbnB1dC1zbWFsbCB7CiAgZmxleDogMCAwIDgwcHg7Cn0KCi5pdGVtLWlucHV0LXJvdyAuaW5wdXQtd2lkZSB7CiAgZmxleDogMTsKfQoKLml0ZW0taW5wdXQtcm93IC5zdWdnZXN0aW9ucyB7CiAgbWFyZ2luLXRvcDogLThweDsKICBiYWNrZ3JvdW5kOiB3aGl0ZTsKICBib3JkZXI6IDFweCBzb2xpZCAjY2NjOwogIGJvcmRlci10b3A6IG5vbmU7CiAgbWF4LWhlaWdodDogMTUwcHg7CiAgb3ZlcmZsb3cteTogYXV0bzsKfQoKLml0ZW0taW5wdXQtcm93IC5zdWdnZXN0aW9uLXdvcmQgewogIHBhZGRpbmc6IDhweDsKICBjdXJzb3I6IHBvaW50ZXI7Cn0KCi5pdGVtLWlucHV0LXJvdyAuc3VnZ2VzdGlvbi13b3JkOmhvdmVyIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWVlOwp9Cgouc3VnZ2VzdGlvbi13cmFwcGVyIHsKICBwb3NpdGlvbjogcmVsYXRpdmU7CiAgZmxleDogMTsKfQoKLnN1Z2dlc3Rpb25zIHsKICBwb3NpdGlvbjogYWJzb2x1dGU7CiAgdG9wOiAxMDAlOwogIGxlZnQ6IDA7CiAgcmlnaHQ6IDA7CiAgYmFja2dyb3VuZDogd2hpdGU7CiAgYm9yZGVyOiAxcHggc29saWQgI2NjYzsKICBib3JkZXItdG9wOiBub25lOwogIG1heC1oZWlnaHQ6IDE1MHB4OwogIG92ZXJmbG93LXk6IGF1dG87CiAgei1pbmRleDogMTAwMDsKICBib3gtc2hhZG93OiAwcHggMnB4IDZweCByZ2JhKDAsMCwwLDAuMSk7Cn0KCi5zdWdnZXN0aW9uLXdvcmQgewogIHBhZGRpbmc6IDhweDsKICBjdXJzb3I6IHBvaW50ZXI7Cn0KCi5zdWdnZXN0aW9uLXdvcmQ6aG92ZXIgewogIGJhY2tncm91bmQtY29sb3I6ICNlZWU7Cn0KCi8qIERyb3Bkb3duIG9wdGlvbiBzdHlsaW5nICovCi5tZC1vcHRpb24gewogIGNvbG9yOiAjMDAwOyAvKiBCbGFjayB0ZXh0IGZvciBiZXR0ZXIgY29udHJhc3QgKi8KICBiYWNrZ3JvdW5kLWNvbG9yOiAjZmZmOyAvKiBXaGl0ZSBiYWNrZ3JvdW5kIGZvciBvcHRpb25zICovCn0KCi5tZC1vcHRpb246aG92ZXIgewogIGJhY2tncm91bmQtY29sb3I6ICM0NDhhZmY7IC8qIEJsdWUgYmFja2dyb3VuZCBvbiBob3ZlciAqLwogIGNvbG9yOiAjZmZmOyAvKiBXaGl0ZSB0ZXh0IG9uIGhvdmVyIGZvciBjb250cmFzdCAqLwp9CgoubWQtb3B0aW9uLXNlbGVjdGVkIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjNDQ4YWZmOyAvKiBCbHVlIGJhY2tncm91bmQgZm9yIHNlbGVjdGVkIG9wdGlvbiAqLwogIGNvbG9yOiAjZmZmOyAvKiBXaGl0ZSB0ZXh0IGZvciBzZWxlY3RlZCBvcHRpb24gKi8KfQoKLyogQ2F0ZWdvcnkgSGVhZGVyIFN0eWxpbmcgKi8KLmNhdGVnb3J5LWhlYWRlciB7CiAgZm9udC1zaXplOiAxLjRlbTsgLyogU2xpZ2h0bHkgbGFyZ2VyIGZvbnQgc2l6ZSAqLwogIGZvbnQtd2VpZ2h0OiBib2xkOwogIG1hcmdpbi10b3A6IDMwcHg7IC8qIEluY3JlYXNlZCB0b3AgbWFyZ2luIGZvciBiZXR0ZXIgc2VwYXJhdGlvbiAqLwogIG1hcmdpbi1ib3R0b206IDE1cHg7IC8qIEluY3JlYXNlZCBib3R0b20gbWFyZ2luICovCiAgcGFkZGluZzogMTBweCAyMHB4OyAvKiBBZGQgcGFkZGluZyBmb3Igc3BhY2luZyAqLwogIGJvcmRlci1ib3R0b206IDJweCBzb2xpZCAjZTBlMGUwOyAvKiBMaWdodCBncmF5IHVuZGVybGluZSAqLwogIGJhY2tncm91bmQtY29sb3I6ICNmOWY5Zjk7IC8qIExpZ2h0IGJhY2tncm91bmQgZm9yIGJldHRlciB2aXNpYmlsaXR5ICovCiAgYm9yZGVyLXJhZGl1czogNHB4OyAvKiBSb3VuZGVkIGNvcm5lcnMgKi8KfQoK" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk15IFZpdGUgUFdBIiwKICAic2hvcnRfbmFtZSI6ICJWaXRlUFdBIiwKICAiZGVzY3JpcHRpb24iOiAiQSBWaXRlLXBvd2VyZWQgUHJvZ3Jlc3NpdmUgV2ViIEFwcCIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwKICAidGhlbWVfY29sb3IiOiAiI2ZmZmZmZiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImljb25zL2ljb24tMTkyeDE5Mi5wbmciLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaWNvbnMvaWNvbi01MTJ4NTEyLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQo=">
+  <script type="module" crossorigin src="/assets/index-10bb78d4.js"></script>
+  <link rel="stylesheet" href="/assets/index-5486232b.css">
+<link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
+<body>
+
+  <!-- Vue app -->
+  <div id="app" class="app-viewport" v-cloak>
+
+    <!-- top bar -->
+    <md-whiteframe md-elevation="3" class="main-toolbar">
+      <md-toolbar>
+        <!-- back button -->
+        <md-button class="md-icon-button" v-if="mode != 'showlist'" v-on:click="onBack">
+            <md-icon>arrow_back</md-icon>
+        </md-button>
+
+        <!-- page title -->
+        <h2 class="md-title" style="flex: 1">{{ pagetitle }}</h2>
+
+        <!-- visualisation of sync status -->
+        <md-chip v-if="syncStatus == 'notsyncing' && mode != 'settings' && mode != 'about'" data-testid="sync-status-not-syncing">Not Syncing</md-chip>
+        <md-chip v-if="syncStatus == 'syncing' && mode != 'settings' && mode != 'about'" class="md-success" data-testid="sync-status-syncing">Syncing</md-chip>
+        <md-chip v-if="syncStatus == 'syncerror' && mode != 'settings' && mode != 'about'" class="md-warn" data-testid="sync-status-sync-error">Sync Error</md-chip>
+        
+        <!-- save new shopping list button -->
+        <md-button class="md-icon-button" v-if="mode == 'addlist'" v-on:click="onClickSaveShoppingList" v-bind:disabled="singleList.title.length == 0" data-testid="button-save-new-list">
+          <md-icon>check</md-icon>
+        </md-button>
+
+        <!-- settings -->
+        <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickSettings">
+          <md-icon>settings</md-icon>
+        </md-button>
+        <!-- about -->
+        <md-button class="md-icon-button" v-if="mode == 'showlist'" v-on:click="onClickAbout">
+          <md-icon>info_outline</md-icon>
+        </md-button>
+
+      </md-toolbar>
+    </md-whiteframe> <!-- top bar -->
+
+    <!-- main content -->
+    <main class="main-content">
+
+      <!-- add new shopping list form-->
+      <md-card v-if="mode == 'addlist'">
+        <md-card-header>Add Shopping List</md-card-header>
+        <md-card-content>
+          <!-- shopping list name -->
+          <md-input-container>
+            <label>List name</label>
+            <md-input placeholder="e.g. Food" v-model="singleList.title"></md-input>
+          </md-input-container>
+
+          <!-- shopping place name -->
+          <md-input-container>
+            <label>Place name</label>
+            <md-input placeholder="e.g. Whole Foods, Reno" v-model="singleList.place.title"></md-input>
+            <md-button class="md-raised" v-bind:disabled="singleList.place.title.length==0" v-on:click="onClickLookup">Lookup</md-button>
+          </md-input-container>
+
+          <!-- shopping place pull-down list -->
+          <md-input-container v-if="places.length > 1">
+            <label for="movie">Choose address</label>
+            <md-select v-bind="selectedPlace" v-on:change="onChangePlace" v-bind:disabled="places.length == 0">
+              <md-option v-for="place in places" :key="place.place_id" v-bind:value="place.place_id">{{ place.display_name }}</md-option>
+            </md-select>
+          </md-input-container>
+
+          <!-- shopping place road -->
+          <md-input-container v-if="singleList.place.address.road">
+            <label>Road</label>
+            <md-input readonly v-model="singleList.place.address.road"></md-input>
+          </md-input-container >
+
+          <!-- shopping place town -->
+          <md-input-container v-if="singleList.place.address.town">
+            <label>Town</label>
+            <md-input readonly v-model="singleList.place.address.town"></md-input>
+          </md-input-container >
+
+          <!-- shopping place city -->
+          <md-input-container v-if="singleList.place.address.city">
+            <label>City</label>
+            <md-input readonly v-model="singleList.place.address.city"></md-input>
+          </md-input-container >
+
+          <!-- shopping place state -->
+          <md-input-container v-if="singleList.place.address.state">
+            <label>State</label>
+            <md-input readonly v-model="singleList.place.address.state"></md-input>
+          </md-input-container >
+
+          <!-- shopping place address -->
+          <md-input-container v-if="singleList.place.address.postcode">
+            <label>Postcode</label>
+            <md-input readonly v-model="singleList.place.address.postcode"></md-input>
+          </md-input-container >
+
+          <!-- shopping place latitude -->
+          <md-input-container v-if="singleList.place.lat != null">
+            <label>Latitude</label>
+            <md-input readonly v-model="singleList.place.lat"></md-input>
+          </md-input-container>
+
+          <!-- shopping place longitude -->
+          <md-input-container v-if="singleList.place.lon != null">
+            <label>Longitude</label>
+            <md-input readonly v-model="singleList.place.lon"></md-input>
+          </md-input-container>
+
+          <!-- shopping place licence -->
+          <md-input-container v-if="singleList.place.license">
+            <label>Licence</label>
+            <md-input readonly v-model="singleList.place.license"></md-input>
+          </md-input-container>
+
+        </md-card-content>
+      </md-card> <!-- add new shopping list form -->
+
+      <!-- shopping list item editor -->
+      <md-list class="itemedit" v-if="mode == 'itemedit'">
+
+        <!-- shopping list item add form -->
+          <md-list-item class="item-input-row">
+              <md-input-container class="input-small">
+                  <md-input v-model="newItemQuantity" placeholder="Quantity" @keyup.enter.native="onAddListItem"></md-input>
+              </md-input-container>
+
+              <md-input-container class="input-small">
+                  <md-input v-model="newItemUnit" placeholder="Unit" @keyup.enter.native="onAddListItem"></md-input>
+              </md-input-container>
+
+              <div class="input-wide suggestion-wrapper">
+                  <md-input-container>
+                      <md-input
+                              v-model="newItemTitle"
+                              placeholder="Item name"
+                              @input="filterSuggestions"
+                              @keyup.enter.native="onAddListItem"
+                      ></md-input>
+                  </md-input-container>
+                  <div v-if="filteredSuggestions.length" class="suggestions">
+                      <div
+                              v-for="(word, index) in filteredSuggestions"
+                              :key="word"
+                              class="suggestion-word"
+                              @click="selectSuggestion(word)"
+                      >
+                          {{ word }}
+                      </div>
+                  </div>
+              </div>
+
+              <md-button class="md-icon-button md-list-action" @click="onAddListItem" :disabled="newItemTitle.length == 0">
+                  <md-icon class="md-primary">add_shopping_cart</md-icon>
+              </md-button>
+          </md-list-item>
+
+          <!-- Dropdown for category selection -->
+          <md-list-item class="item-input-row">
+            <md-input-container class="input-wide">
+              <label>Category</label>
+              <md-select v-model="newItemCategory" data-testid="select-item-category">
+                <md-option v-for="category in predefinedCategories" :key="category" :value="category" :data-testid="`option-category-${category}`">
+                  {{ category }}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </md-list-item>
+
+        <!-- shopping list items grouped by category -->
+        <div v-for="(items, category) in groupedShoppingListItems" :key="category">
+          <h3 class="category-header">{{ category }}</h3> <!-- Add class for styling -->
+          <md-list-item class="listitem" v-for="item in items" :key="item._id">
+            <!-- checkbox against each item -->
+            <div>
+              <md-checkbox v-model="item.checked" class="md-primary" v-on:change="onCheckListItem(item._id)" :data-testid="`checkbox-${item._id}`" ></md-checkbox>
+            </div>
+
+            <!-- shopping list item title -->
+            <div class="md-list-text-container">
+                <span :class="{ cardchecked: item.checked }">{{ item.quantity }} {{ item.unit }} {{ item.title }}</span>
+            </div>
+
+            <!-- shopping list item detail button -->
+            <md-button v-on:click="onShowItemDetail(item)" class="md-icon-button md-list-action" :data-testid="`btn-item-detail-${item.title}`">
+              <md-icon>info</md-icon>
+            </md-button>
+
+            <!-- shopping list item delete button -->
+            <md-button v-on:click="onDeleteItem(item._id)" class="md-icon-button md-list-action">
+              <md-icon>cancel</md-icon>
+            </md-button>
+
+            <md-divider></md-divider>
+          </md-list-item>
+        </div>
+      </md-list> <!-- shopping list item editor -->
+
+      <!-- item detail view -->
+      <md-card v-if="mode == 'itemdetail'" class="item-detail-card" data-testid="item-detail-card">
+        <md-card-header class="item-detail-header">
+          <div class="item-detail-title">Item Details</div>
+        </md-card-header>
+        <md-card-content class="item-detail-content">
+          <!-- item title -->
+          <md-input-container class="item-detail-input">
+            <label>Item Name</label>
+            <md-input v-model="selectedItem.title" data-testid="input-item-title"></md-input>
+          </md-input-container>
+            <!-- Item Quantity -->
+            <md-input-container class="item-detail-input">
+                <label>Item Quantity</label>
+                <md-input v-model="selectedItem.quantity"></md-input>
+            </md-input-container>
+            <!-- Item Unit -->
+            <md-input-container class="item-detail-input">
+                <label>Item Unit</label>
+                <md-input v-model="selectedItem.unit"></md-input>
+            </md-input-container>
+
+          <!-- Category dropdown -->
+          <md-input-container class="item-detail-input">
+            <label>Category</label>
+            <md-select v-model="selectedItem.category" data-testid="select-item-category">
+              <md-option v-for="category in predefinedCategories" :key="category" :value="category" :data-testid="`option-category-${category}`">
+                {{ category }}
+              </md-option>
+            </md-select>
+          </md-input-container>
+
+          <!-- item checked status -->
+          <div class="item-detail-checkbox">
+            <md-checkbox v-model="selectedItem.checked" class="md-primary" data-testid="checkbox-item-checked"></md-checkbox>
+            <label>Checked</label>
+          </div>
+        </md-card-content>
+
+        <md-card-actions class="item-detail-actions">
+          <!-- save button -->
+          <md-button class="save-button" v-on:click="onSaveItemDetail" data-testid="btn-save-item-detail">Save</md-button>
+          <!-- cancel button -->
+          <md-button class="cancel-button" v-on:click="onBackToList" data-testid="btn-cancel-item-detail">Cancel</md-button>
+        </md-card-actions>
+      </md-card>
+
+      <!-- list of shopping lists -->
+      <md-list v-if="mode == 'showlist'">
+        <md-card v-for="list in sortedShoppingLists" :key="list._id" :data-id="list._id">
+          <md-card-header>
+            <!-- shopping list title -->
+            <div class="md-title" v-bind:class="{ cardchecked: list.checked}">{{ list.title }}</div>
+
+            <!-- shopping place title -->
+            <div class="md-subhead">{{ list.place.title }}</div>
+
+            <!-- 'speed dial' buttons -->
+            <md-speed-dial md-open="hover" md-direction="left" class="md-fab-top-right">
+
+              <!-- more ... button -->
+              <md-button class="md-fab" md-fab-trigger>
+                <md-icon md-icon-morph>more_vert</md-icon>
+                <md-icon>more_horiz</md-icon>
+              </md-button>
+
+              <!-- edit button -->
+              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickEdit(list._id, list.title)">
+                <md-icon>edit</md-icon>
+              </md-button>
+
+              <!-- delete button -->
+              <md-button class="md-fab md-primary md-mini md-clean" v-on:click="onClickDelete(list._id)">
+                <md-icon>delete</md-icon>
+              </md-button>
+            </md-speed-dial>
+          </md-card-header>
+
+          <!-- counts of numbers of items in the list and numbers checked e.g 4/10 -->
+          <md-card-content v-if="counts[list._id]">
+            {{ counts[list._id].checked }} / {{ counts[list._id].total }}
+          </md-card-content>
+
+          <md-card-actions>
+            <!-- button to edit the list items -->
+            <md-button v-on:click="onClickList(list._id, list.title)">
+                <md-icon>chevron_right</md-icon>
+            </md-button>
+          </md-card-actions>
+        </md-card>
+      </md-list> <!-- list of shopping list -->
+
+      <!-- settings -->
+      <md-card v-if="mode == 'settings'">
+          <md-card-header>Settings</md-card-header>
+          <md-card-content>
+            You can sync your shopping lists to a remote Apache CouchDB, IBM Cloudant or PouchDB server. Supply the URL, including
+            credentials and database name and hit "Start Sync".
+
+            <!-- Cloudant URL -->
+            <md-input-container>
+              <label>Sync URL</label>
+              <md-input placeholder="e.g http://localhost:5984/list" type="url" v-model="syncURL"></md-input>
+            </md-input-container>
+
+            <h4>Sync Status</h4>
+
+            <!-- visualisation of sync status -->
+            <md-chip v-if="syncStatus == 'notsyncing'">Not Syncing</md-chip>
+            <md-chip v-if="syncStatus == 'syncing'" class="md-primary">Syncing</md-chip>
+            <md-chip v-if="syncStatus == 'syncerror'" class="md-warn">Sync Error</md-chip>
+          </md-card-content>
+
+          <md-card-actions>
+            <!-- submit button that saves the Cloudant URL -->
+            <md-button v-on:click="onClickStartSync">
+                Start Sync
+            </md-button>
+          </md-card-actions>
+        </md-card> <!-- settings -->
+
+      <!-- about -->
+      <md-card v-if="mode == 'about'">
+          <md-card-header>About</md-card-header>
+          <md-card-content>
+            <a href="https://github.com/ibm-watson-data-lab/shopping-list">Shopping List is a series of Offline First demo apps, each built using a different stack.</a> These demo apps cover Progressive Web Apps, hybrid mobile apps, native mobile apps, and desktop apps. This particular demo app is a <b>Progressive Web App</b> built using <b>Vue.js and PouchDB</b>. <a href="https://github.com/ibm-watson-data-lab/shopping-list-vuejs-pouchdb">Get the source code.</a>
+          </md-card-content>
+
+          <md-card-actions>
+            <!-- No action -->
+          </md-card-actions>
+      </md-card> <!-- about -->
+
+      <!-- floating 'add shopping list' button -->
+      <div class="floatingbutton" v-if="mode == 'showlist'">
+        <md-button class="md-fab md-primary md-raised" v-on:click="onClickAddShoppingList">
+          <md-icon>add</md-icon>
+        </md-button>
+      </div> <!-- floating 'add shopping list' button -->
+
+    </main> <!-- main content -->
+
+  </div> <!-- app -->
+  <!--  JavaScript Scripts-->
+
+  <!-- our code -->
+  
+
+  </body>
+</html>
