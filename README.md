@@ -2,7 +2,12 @@
 
 ## About the Project
 
-The **SYT Shoppinglist Application** is a web-based tool designed to help users manage their shopping lists efficiently across multiple devices. It leverages **PouchDB** and **CouchDB** for seamless data synchronization.
+The **SYT Shoppinglist Application** is a web-based tool designed to help users manage their shopping lists efficiently across multiple devices.
+It leverages **PouchDB** and **CouchDB** for seamless data synchronization.
+
+You dont actually have to deploy it yourself. The application is available as a PWA at:
+
+`Https://tgm-hit.github.io/syt5-gek1051-mobile-application-fmms_shoppinglist/`
 
 ## Installation
 
