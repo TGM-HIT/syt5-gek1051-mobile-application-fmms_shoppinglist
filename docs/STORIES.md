@@ -38,12 +38,12 @@
 | --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | ---- | ---- | --------------------------------------------------------------------------------------------- |
 | 13  | Als Benutzer möchte ich eine Detailansicht für jeden hinzugefügten Artikel aufrufen können, die neben Name, Menge, Kategorie, Marke (...) auch ein optionales Bild des Produktes enthalten könnte. | 3   | MF   | N2H  | [#13](https://github.com/TGM-HIT/syt5-gek1051-mobile-application-fmms_shoppinglist/issues/12) |
 | 14  | Als Benutzer möchte ich die App sowohl auf Deutsch als auch auf Englisch verwenden können, damit sie für mich und andere Nutzer unabhängig von der Sprache verwendbar und verständlich ist.        | 4   | SP   | N2H  | [#14](https://github.com/TGM-HIT/syt5-gek1051-mobile-application-fmms_shoppinglist/issues/13) |
-| 15  | Als Benutzer möchte ich einen Dark Mode aktivieren können, um die Nutzung der App bei schlechten Lichtverhältnissen angenehmer zu gestalten und meine Augen zu schonen.                            | 3   | MF   | N2H  | [#15](https://github.com/TGM-HIT/syt5-gek1051-mobile-application-fmms_shoppinglist/issues/17) |
+| 15  | Als Benutzer möchte ich einen Dark Mode aktivieren können, um die Nutzung der App bei schlechten Lichtverhältnissen angenehmer zu gestalten und meine Augen zu schonen.                            | 3   | FD   | N2H  | [#15](https://github.com/TGM-HIT/syt5-gek1051-mobile-application-fmms_shoppinglist/issues/17) |
 
 ### Zusammenfassung
 
-- FD (Felix Dahmen): 8 SP
-- MF (Manuel Fellner): 19 SP
+- FD (Felix Dahmen): 11 SP
+- MF (Manuel Fellner): 16 SP
 - SP (Sebastian Pollak): 12 SP
 - MM (Milos Matic): 11 SP
 - Gesamt: 49 SP
