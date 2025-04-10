@@ -4,7 +4,7 @@ import { resolve } from 'path';
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
-  base: "/syt5-gek1051-mobile-application-fmms_shoppinglist/"
+  base: "/syt5-gek1051-mobile-application-fmms_shoppinglist/",
   root: resolve(__dirname, 'src'),
   plugins: [
     vue(),
